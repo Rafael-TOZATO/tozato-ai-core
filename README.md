@@ -6,12 +6,17 @@
 
 Hub profissional de engenharia de software, QA, dados e inteligência artificial local.
 
-<p>
+<p align="center">
   <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js">
+  <img src="https://img.shields.io/badge/React-19-20232A?logo=react&logoColor=61DAFB" alt="React">
   <img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js&logoColor=white" alt="Node.js">
   <img src="https://img.shields.io/badge/Ollama-offline-111111?logo=ollama&logoColor=white" alt="Ollama offline">
   <img src="https://img.shields.io/badge/Qwen3.5-9B-7C3AED" alt="Qwen3.5 9B">
   <img src="https://img.shields.io/badge/Vercel-deploy-000000?logo=vercel&logoColor=white" alt="Vercel">
+  <img src="https://img.shields.io/badge/QA_%26_Testing-Automated-00599C?logo=jest&logoColor=white" alt="QA Automation">
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License MIT">
 </p>
 
 ## Visão geral
@@ -25,28 +30,3 @@ Requisitos: Ollama instalado, aproximadamente 7,5 GB livres para o modelo e 16 G
 ```bash
 ollama pull qwen3.5:9b
 OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NO_CLOUD=1 OLLAMA_CONTEXT_LENGTH=65536 ollama serve
-```
-
-Em outro terminal:
-
-```bash
-pnpm install
-OLLAMA_BASE_URL=http://127.0.0.1:11434/v1 pnpm dev
-```
-
-O endpoint usado pelo assistente é `http://127.0.0.1:11434/v1`, com o modelo `qwen3.5:9b` e contexto de até 65.536 tokens. O código não inclui chaves ou arquivos `.env` no commit.
-
-## Dossiê técnico
-
-A arquitetura completa, os requisitos de hardware, benchmarks e o guia de implantação estão em [Dossiê Técnico — Agente de Código Offline](docs/Dossie-Tecnico-Agente-Codigo-Offline.pdf).
-
-## Canais oficiais
-
-- [GitHub](https://github.com/Rafael-TOZATO)
-- [LinkedIn](https://linkedin.com/in/rafaeltozato81)
-- [Medium](https://medium.com/@ornelas.tozato)
-- [Tozato Dev Hub](https://tozato-dev-hub.vercel.app)
-
-## Licença
-
-Projeto pessoal de portfólio de Rafael Ornelas Tozato.
