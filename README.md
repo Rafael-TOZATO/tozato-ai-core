@@ -1,70 +1,52 @@
 <p align="center">
-  <img src="assets/banner.jpg" alt="Banner do Tozato Dev Hub v2" width="100%">
+  <img src="assets/banner.jpg" alt="Banner do TozatoCode-AI" width="100%">
 </p>
 
-# Tozato Dev Hub v2
+# Tozato Dev Hub
 
-Hub profissional para engenharia de software, automação de testes de qualidade (QA) e inteligência artificial.
+Hub profissional de engenharia de software, QA, dados e inteligência artificial local.
 
 <p>
-  <img src="https://img.shields.io/badge/Vercel-deploy-000000?logo=vercel&logoColor=white" alt="Vercel deploy">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white" alt="HTML5">
-  <img src="https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white" alt="CSS3">
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black" alt="JavaScript">
-  <img src="https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white" alt="Node.js">
-  <img src="https://img.shields.io/badge/Gemini_API-8E75B2?logo=googlegemini&logoColor=white" alt="Gemini API">
-  <img src="https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white" alt="GitHub">
-  <img src="https://img.shields.io/badge/status-em%20desenvolvimento-yellow" alt="Status do deploy">
-  <img src="https://img.shields.io/badge/license-n%C3%A3o%20definida-lightgrey" alt="Licença">
+  <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js">
+  <img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Ollama-offline-111111?logo=ollama&logoColor=white" alt="Ollama offline">
+  <img src="https://img.shields.io/badge/Qwen3.5-9B-7C3AED" alt="Qwen3.5 9B">
+  <img src="https://img.shields.io/badge/Vercel-deploy-000000?logo=vercel&logoColor=white" alt="Vercel">
 </p>
 
 ## Visão geral
 
-O Tozato Dev Hub reúne o portfólio, projetos, plataformas profissionais, métricas ilustrativas e um assistente sobre engenharia de software, QA, dados, automação e IA.
+O Tozato Dev Hub reúne portfólio, certificações, projetos e um assistente de engenharia de software. A interface pública é compatível com execução local usando Ollama e Qwen3.5 9B, sem depender de APIs comerciais.
 
-## Funcionalidades
+## Execução 100% offline
 
-- Banner visual do TozatoCode-AI.
-- Cards de acesso para GitHub, LinkedIn, Medium, Microsoft Learn, DIO e H-Folio.
-- Repositórios em destaque com foco em Power BI, RPA, IA e portfólio.
-- Métricas animadas ilustrativas para QA, CI/CD, BI e desenvolvimento.
-- Chat com Gemini API, cinco sugestões de perguntas, fallback local, envio por Enter e botão Enviar.
+Requisitos: Ollama instalado, aproximadamente 7,5 GB livres para o modelo e 16 GB de RAM (24 GB ou mais recomendado para contexto estendido).
 
-## Tecnologias
-
-HTML5, CSS3, JavaScript, Node.js, Gemini API, GitHub e Vercel.
-
-## Como executar localmente
-
-1. Instale Node.js.
-2. Defina `GEMINI_API_KEY` no ambiente local.
-3. Sirva o diretório como uma aplicação web estática ou publique-o na Vercel.
-
-## Variáveis de ambiente
-
-- `GEMINI_API_KEY`
-
-## Estrutura de pastas
-
-```text
-.
-├── assets/
-│   └── banner.jpg
-├── app/
-│   ├── api/chat/route.ts
-│   ├── layout.tsx
-│   └── page.tsx
-├── index.html
-├── public/index.html
-├── README.md
-└── .gitignore
+```bash
+ollama pull qwen3.5:9b
+OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NO_CLOUD=1 OLLAMA_CONTEXT_LENGTH=65536 ollama serve
 ```
 
-## Autor
+Em outro terminal:
 
-Rafael Ornelas Tozato
+```bash
+pnpm install
+OLLAMA_BASE_URL=http://127.0.0.1:11434/v1 pnpm dev
+```
+
+O endpoint usado pelo assistente é `http://127.0.0.1:11434/v1`, com o modelo `qwen3.5:9b` e contexto de até 65.536 tokens. O código não inclui chaves ou arquivos `.env` no commit.
+
+## Dossiê técnico
+
+A arquitetura completa, os requisitos de hardware, benchmarks e o guia de implantação estão em [Dossiê Técnico — Agente de Código Offline](docs/Dossie-Tecnico-Agente-Codigo-Offline.pdf).
+
+## Canais oficiais
 
 - [GitHub](https://github.com/Rafael-TOZATO)
-- [LinkedIn](https://www.linkedin.com/in/rafaeltozato81)
+- [LinkedIn](https://linkedin.com/in/rafaeltozato81)
 - [Medium](https://medium.com/@ornelas.tozato)
-- [DIO](https://web.dio.me/users/ornelas_tozato)
+- [Tozato Dev Hub](https://tozato-dev-hub.vercel.app)
+
+## Licença
+
+Projeto pessoal de portfólio de Rafael Ornelas Tozato.

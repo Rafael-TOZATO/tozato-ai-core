@@ -1,0 +1,78 @@
+
+
+DOSSIÊ TÉCNICO & ARQUITETURA DE SOFTWARE
+Agente de Código Local e Totalmente Offline
+Autor: Rafael Ornelas TozatoEspecialização: Engenheiro Químico | Governança 4.0 | QA &
+Dados
+Tecnologias: OpenCode | Ollama | Qwen3.5 9B | VercelEcossistema: Tozato Dev Hub & TozatoCode-AI
+Sumário Executivo: Este documento detalha a implementação de um Agente de Inteligência Artificial para Engenharia
+de Software operando em modo 100% offline no ambiente local. Combinando o OpenCode, o runtime Ollama e os
+pesos abertos do modelo Qwen3.5 (9B), a solução elimina faturas por token e riscos de vazamento de dados
+confidenciais, mantendo a interoperabilidade com a interface pública de portfólio no Tozato Dev Hub.
+1. ARQUITETURA DA SOLUÇÃO & PILARES TÉCNICOS
+A arquitetura divide o processamento entre a execução autônoma local e a exibição de interface distribuída:
+ComponenteFunção PrincipalEspecificação Técnica
+OpenCode
+Agente de Execução &
+Edição
+Orquestrador terminal que lê repositórios, cria diffs, executa testes e gerencia
+comandos.
+OllamaServer & API Local
+Runtime de inferência local expondo endpoint compatível em
+127.0.0.1:11434.
+Qwen3.5 9B
+Modelo de Linguagem
+(LLM)
+Modelo de pesos abertos otimizado para Function Calling e Contexto
+Estendido (64k tokens).
+Vercel /
+GitHub
+Interface & Hub
+Profissional
+Hospedagem da Landing Page interativa com botões de acionamento
+dinâmicos.
+2. MÉTRICAS DE PERFORMANCE & DESEMPENHO BENCHMARK
+65.6
+LIVECODEBENCH V6 (QWEN 9B)
+66.1
+BFCL-V4 (FUNCTION CALLING)
+65,536
+JANELA DE CONTEXTO (TOKENS)
+3. BENEFÍCIOS DE GOVERNANÇA E PRIVACIDADE
+Privacidade Absoluta (Zero Leak): Nenhum trecho de código, chave de API ou propriedade intelectual
+trafega pela internet ou servidores de terceiros.
+Previsibilidade Financeira: Eliminação completa do custo marginal por token em chamadas comerciais
+(OpenAI/Anthropic).
+Continuidade Operacional: Garantia de produtividade em cenários de instabilidade de rede, viagens ou
+ambientes fabris/isolados.
+Tozato Dev Hub — Dossiê Técnico IA OfflinePágina 1 de 2
+
+4. GUIA EXECUTIVO DE IMPLANTAÇÃO DO SERVIDOR OFFLINE
+Para inicializar o servidor de IA local sem chamadas externas e com suporte a contexto estendido, execute os
+comandos abaixo no terminal:
+      # 1. Download do modelo otimizado (Executar uma vez conectado) ollama pull qwen3.5:9b # 2. In
+icialização do servidor 100% isolado (Modo Offline) OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NO_CLOUD=1 O
+LLAMA_CONTEXT_LENGTH=65536 ollama serve
+     
+5. CONFIGURAÇÃO DO PROJETO OPENCODE (OPENCODE.JSON)
+Arquivo de parâmetros para vinculo do agente local:
+      { "model": "qwen3.5:9b", "small_model": "qwen3.5:9b", "baseURL": "http://127.0.0.1:11434/v1", 
+"tools": { "web_search": false } }
+     
+6. INTEGRAÇÃO COM O TOZATO DEV HUB & PORTFÓLIO
+A aplicação publica no ar através da Vercel (tozato-dev-hub.vercel.app) atua como a vitrine profissional
+interativa. Ela centraliza a navegação pelos botões de acesso a certificações e repositórios oficiais, ao mesmo
+tempo em que disponibiliza toda a arquitetura de código para ser clonada e executada offline por engenheiros e
+recrutadores.
+Matriz de Requisitos de Hardware para Execução Local:
+RAM Mínima do Sistema: 16 GB (Recomendado 24GB+ para contexto de 64k).
+Espaço em Disco: ~7.5 GB para armazenar os pesos do modelo Qwen3.5 9B.
+Compatibilidade: macOS, Linux e Windows (WSL2).
+7. CONEXÕES PROFISSIONAIS & CANAIS DE CONTATO
+Acesse os canais oficiais para acompanhar outros projetos em Governança 4.0, Automação de Testes e
+Inteligência Artificial:
+• GitHub Oficial: github.com/Rafael-TOZATO
+• LinkedIn Profissional: linkedin.com/in/rafaeltozato81
+• Medium (Artigos Técnicos): medium.com/@ornelas.tozato
+• Tozato Dev Hub: tozato-dev-hub.vercel.app
+Rafael Ornelas Tozato — Engenharia de Software & IA LocalPágina 2 de 2
