@@ -3,15 +3,15 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Tozato Dev Hub | Rafael Ornelas Tozato",
   description: "Hub oficial do TozatoCode-AI para engenharia de software, QA e inteligência artificial.",
-  metadataBase: new URL("https://tozato.vercel.app"),
+  metadataBase: new URL("https://tozato-dev-hub.vercel.app"),
   openGraph: {
     title: "Tozato Dev Hub | Rafael Ornelas Tozato",
     description: "Hub oficial do TozatoCode-AI para engenharia de software, QA e inteligência artificial.",
-    url: "https://tozato.vercel.app",
+    url: "https://tozato-dev-hub.vercel.app",
     siteName: "Tozato Dev Hub",
     images: [
       {
-        url: "https://tozato.vercel.app/público/Gemini_Generated_Image_v25p8vv25p8vv25p.jpg",
+        url: "https://raw.githubusercontent.com/Rafael-TOZATO/tozato-ai-core/principal/p%C3%BAlitico/Gemini_Generated_Image_v25p8vv25p8vv25p.jpg",
         width: 1200,
         height: 630,
         alt: "Banner Tozato Dev Hub - Rafael Ornelas Tozato",
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Tozato Dev Hub | Rafael Ornelas Tozato",
     description: "Hub oficial do TozatoCode-AI para engenharia de software, QA e inteligência artificial.",
-    images: ["https://tozato.vercel.app/público/Gemini_Generated_Image_v25p8vv25p8vv25p.jpg"],
+    images: ["https://raw.githubusercontent.com/Rafael-TOZATO/tozato-ai-core/principal/p%C3%BAlitico/Gemini_Generated_Image_v25p8vv25p8vv25p.jpg"],
   },
 }
 
