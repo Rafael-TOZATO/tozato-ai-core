@@ -1,20 +1,20 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Tozato AI-Core | Rafael Ornelas Tozato",
-  description: "Hub oficial de engenharia de software, QA e inteligência artificial local.",
+  title: "Tozato Dev Hub | Rafael Ornelas Tozato",
+  description: "Hub oficial do TozatoCode-AI para engenharia de software, QA e inteligência artificial.",
   metadataBase: new URL("https://tozato-dev-hub.vercel.app"),
   openGraph: {
-    title: "Tozato AI-Core | Rafael Ornelas Tozato",
-    description: "Hub oficial de engenharia de software, QA e inteligência artificial local.",
+    title: "Tozato Dev Hub | Rafael Ornelas Tozato",
+    description: "Hub oficial do TozatoCode-AI para engenharia de software, QA e inteligência artificial.",
     url: "https://tozato-dev-hub.vercel.app",
-    siteName: "Tozato AI-Core",
+    siteName: "Tozato Dev Hub",
     images: [
       {
         url: "https://raw.githubusercontent.com/Rafael-TOZATO/tozato-ai-core/principal/p%C3%BAlitico/Gemini_Generated_Image_v25p8vv25p8vv25p.jpg",
         width: 1200,
         height: 630,
-        alt: "Banner Tozato AI-Core - Rafael Ornelas Tozato",
+        alt: "Banner Tozato Dev Hub - Rafael Ornelas Tozato",
       },
     ],
     locale: "pt_BR",
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tozato AI-Core | Rafael Ornelas Tozato",
-    description: "Hub oficial de engenharia de software, QA e inteligência artificial local.",
+    title: "Tozato Dev Hub | Rafael Ornelas Tozato",
+    description: "Hub oficial do TozatoCode-AI para engenharia de software, QA e inteligência artificial.",
     images: ["https://raw.githubusercontent.com/Rafael-TOZATO/tozato-ai-core/principal/p%C3%BAlitico/Gemini_Generated_Image_v25p8vv25p8vv25p.jpg"],
   },
 }
