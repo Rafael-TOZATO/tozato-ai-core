@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tozato Dev Hub</title>
+<link rel="stylesheet" href="/chat-attachments.css">
+<meta name="description" content="Hub profissional de engenharia de software, QA, dados e IA local 100% offline.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tozato - Core AI">
+<meta property="og:title" content="Tozato - Core AI">
+<meta property="og:description" content="Transforme ideias em impacto.">
+<meta property="og:url" content="https://tozato-dev-hub.vercel.app/">
+<meta property="og:image" content="https://tozato-dev-hub.vercel.app/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tozato - Core AI: transforme ideias em impacto">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tozato - Core AI">
+<meta name="twitter:description" content="Transforme ideias em impacto.">
+<meta name="twitter:image" content="https://tozato-dev-hub.vercel.app/og-image.jpg">
 <style>
 :root{--bg:#070b1a;--card:#0e1630;--bd:#1f2d57;--tx:#e8eeff;--mu:#8fa0cc;--ac:#22e5d0;--ac2:#6a8bff;--rd:#ff4d5e;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -140,14 +156,33 @@ var R={
 "principal":"O projeto principal é o tozato-dev-hub, landing page oficial do TozatoCode-AI com assistente integrado.",
 "artigo":"Os artigos técnicos ficam no Medium, no perfil @ornelas.tozato."};
 var log=document.getElementById("log"),q=document.getElementById("q");
-function add(t,c){var d=document.createElement("div");d.className="msg "+c;d.textContent=t;log.appendChild(d);return d}
+function add(t,c){var d=document.createElement("div");d.className="msg "+c;d.textContent=t;if(window.__att)window.__att.renderLinkCards(d);log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
 async function ask(t){
-t=t.trim();if(!t)return;add(t,"me");
+t=t.trim();var fl=window.__att?window.__att.getAttachments():[];
+if(!t&&!fl.length)return;
+var shown=t;if(fl.length)shown+=(shown?"\n":"")+"Anexos: "+fl.map(function(f){return f.name}).join(", ");
+add(shown,"me");
 var w=document.createElement("div");w.className="msg bot typing";w.innerHTML="<span></span><span></span><span></span>";log.appendChild(w);
-try{var r=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:t})});var d=await r.json();if(!r.ok)throw new Error(d.error||"Ollama indisponível");w.remove();add(d.answer,"bot")}catch(e){w.remove();var l=t.toLowerCase(),a="Posso falar sobre os projetos, tecnologias e artigos do hub. Experimente um dos temas sugeridos.";for(var k in R){if(l.indexOf(k)>-1){a=R[k];break}}add(a,"bot")}}
+var opts;
+if(fl.length){var fd=new FormData();fd.append("message",t);fl.forEach(function(f){fd.append("files",f,f.name)});opts={method:"POST",body:fd}}
+else{opts={method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:t})}}
+if(window.__att)window.__att.clear();
+try{var r=await fetch("/api/chat",opts);var d=await r.json();if(!r.ok)throw new Error(d.error||"Ollama indisponível");w.remove();add(d.answer,"bot")}catch(e){w.remove();var l=t.toLowerCase(),a="Posso falar sobre os projetos, tecnologias e artigos do hub. Experimente um dos temas sugeridos.";for(var k in R){if(l.indexOf(k)>-1){a=R[k];break}}add(a,"bot")}}
 document.getElementById("chips").onclick=function(e){if(e.target.tagName=="BUTTON")ask(e.target.textContent)};
 document.getElementById("go").onclick=function(){ask(q.value);q.value=""};
 q.onkeydown=function(e){if(e.key=="Enter"){ask(q.value);q.value=""}};
+</script>
+<script type="module">
+import { initChatAttachments } from "/chat-attachments.js";
+window.__att = initChatAttachments({
+  form: ".chat .in",
+  input: "#q",
+  trayBefore: true,
+  bannerUrl: "/og-image.jpg",
+  cardHosts: [location.host, "tozato-dev-hub.vercel.app", "github.com/Rafael-TOZATO"],
+  cardTitle: "Tozato - Core AI",
+  cardDescription: "Transforme ideias em impacto"
+});
 </script>
 </body>
 </html>

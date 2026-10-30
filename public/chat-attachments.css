@@ -1,0 +1,86 @@
+/* Tozato - Core AI | estilos dos anexos do chat */
+:root {
+  --tca-bg: var(--card, #0d1b2e);
+  --tca-fg: var(--tx, #e6f4ff);
+  --tca-accent: var(--ac, #5ec8ff);
+  --tca-border: var(--bd, rgba(94, 200, 255, 0.25));
+  --tca-danger: var(--rd, #ff4d5e);
+}
+
+.tca-bar { display: flex; align-items: center; gap: 4px; }
+
+.tca-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid transparent; background: transparent; color: var(--tca-accent);
+  cursor: pointer; transition: background .15s, border-color .15s;
+}
+.tca-btn:hover { background: rgba(94, 200, 255, 0.12); border-color: var(--tca-border); }
+.tca-btn:focus-visible { outline: 2px solid var(--tca-accent); outline-offset: 2px; }
+.tca-btn.is-recording { color: #fff; background: var(--tca-danger); animation: tca-pulse 1.2s infinite; }
+@keyframes tca-pulse { 0% { box-shadow: 0 0 0 0 rgba(255,77,94,.55); } 100% { box-shadow: 0 0 0 12px rgba(255,77,94,0); } }
+
+.tca-tray { display: flex; flex-wrap: wrap; gap: 8px; }
+.tca-tray:empty { display: none; }
+.tca-chip {
+  position: relative; display: flex; align-items: center; gap: 8px;
+  max-width: 220px; padding: 6px 28px 6px 6px; border-radius: 10px;
+  background: var(--tca-bg); color: var(--tca-fg); border: 1px solid var(--tca-border);
+  font-size: 13px;
+}
+.tca-chip img, .tca-chip video { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; }
+.tca-chip audio { width: 150px; height: 32px; }
+.tca-ext {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 6px; background: rgba(94,200,255,.15);
+  text-transform: uppercase; font-size: 11px; font-weight: 700;
+}
+.tca-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tca-x {
+  position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: rgba(255,255,255,.12); color: var(--tca-fg); cursor: pointer;
+}
+.tca-x:hover { background: var(--tca-danger); }
+
+/* Modal da câmera */
+.tca-modal {
+  position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center;
+  background: rgba(3, 10, 20, .85); padding: 16px;
+}
+.tca-modal-box {
+  width: min(100%, 640px); background: var(--tca-bg); border: 1px solid var(--tca-border);
+  border-radius: 16px; overflow: hidden;
+}
+.tca-modal-box video { display: block; width: 100%; max-height: 70vh; background: #000; object-fit: contain; }
+.tca-modal-actions { display: flex; gap: 8px; justify-content: center; padding: 12px; flex-wrap: wrap; }
+.tca-primary, .tca-secondary {
+  padding: 10px 18px; border-radius: 999px; font: inherit; font-weight: 600; cursor: pointer;
+}
+.tca-primary { background: var(--tca-accent); color: #04121f; border: 0; }
+.tca-secondary { background: transparent; color: var(--tca-fg); border: 1px solid var(--tca-border); }
+
+/* Card de link com o banner */
+.tca-card {
+  display: block; margin-top: 8px; max-width: 420px; overflow: hidden;
+  border-radius: 12px; border: 1px solid var(--tca-border);
+  background: var(--tca-bg); color: var(--tca-fg); text-decoration: none;
+  transition: transform .15s, border-color .15s;
+}
+.tca-card:hover { transform: translateY(-1px); border-color: var(--tca-accent); }
+.tca-card img { display: block; width: 100%; aspect-ratio: 1200 / 630; object-fit: cover; }
+.tca-card-body { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; }
+.tca-card-desc { font-size: 13px; opacity: .85; }
+.tca-card-host { font-size: 12px; opacity: .55; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tca-btn.is-recording { animation: none; }
+  .tca-card { transition: none; }
+}
+
+.in .tca-bar{flex:none}
+.in .tca-btn{width:38px;height:38px;padding:0;align-self:center;border:1px solid transparent;border-radius:50%;background:transparent;color:var(--tca-accent)}
+.in .tca-btn:hover{background:rgba(94,200,255,.12);border-color:var(--tca-border)}
+.in .tca-btn.is-recording{background:var(--tca-danger);color:#fff}
+.in .tca-file,.in .tca-cam-fallback{display:none}
+.tca-tray{margin-top:10px}
