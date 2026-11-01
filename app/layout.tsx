@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: 'Tozato Core AI',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://raw.githubusercontent.com/Rafael-TOZATO/tozato-ai-core/main/Tozato-Core-AI.png',
         width: 1200,
         height: 630,
         alt: 'Tozato - Core AI: transforme ideias em impacto',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Tozato - Core AI | Rafael Ornelas Tozato',
     description: 'Hub oficial de engenharia de software, QA e inteligência artificial local.',
-    images: ['/og-image.jpg'],
+    images: ['https://raw.githubusercontent.com/Rafael-TOZATO/tozato-ai-core/main/Tozato-Core-AI.png'],
   },
 }
 
