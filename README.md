@@ -2,7 +2,7 @@
   <img src="assets/banner.jpg" alt="Tozato - Core AI: transforme ideias em impacto" width="100%">
 </p>
 
-# Tozato Dev Hub
+# Tozato AI Core
 
 Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governança de Dados e Inteligência Artificial Local.
 
