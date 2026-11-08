@@ -21,6 +21,21 @@ const INLINE_TYPES = /^(image\/|audio\/|video\/|application\/pdf$)/
 type GPart = { text: string } | { inlineData: { mimeType: string; data: string } }
 type HistoryItem = { role: "user" | "model"; text: string }
 
+function inferMimeType(file: File): string {
+  const supplied = (file.type || "").split(";")[0].toLowerCase()
+  if (supplied && supplied !== "application/octet-stream") return supplied
+
+  const extension = file.name.split(".").pop()?.toLowerCase() || ""
+  const knownTypes: Record<string, string> = {
+    txt: "text/plain", md: "text/markdown", csv: "text/csv", json: "application/json", log: "text/plain",
+    pdf: "application/pdf", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", gif: "image/gif",
+    webp: "image/webp", mp3: "audio/mpeg", wav: "audio/wav", m4a: "audio/mp4", aac: "audio/aac",
+    ogg: "audio/ogg", oga: "audio/ogg", flac: "audio/flac", webm: "audio/webm", mp4: "video/mp4",
+    mov: "video/quicktime", aiff: "audio/aiff",
+  }
+  return knownTypes[extension] || supplied
+}
+
 function parseHistory(raw: unknown): HistoryItem[] {
   let value: unknown = raw
   if (typeof raw === "string") {
@@ -67,7 +82,7 @@ async function buildParts(message: string, files: File[]): Promise<GPart[]> {
   const parts: GPart[] = []
   let text = message
   for (const file of files) {
-    const mime = (file.type || "").split(";")[0]
+    const mime = inferMimeType(file)
     if (TEXT_TYPES.test(mime) || TEXT_EXT.test(file.name)) {
       const content = (await file.text()).slice(0, MAX_TEXT_CHARS)
       text += `\n\n[Arquivo: ${file.name}]\n${content}`
