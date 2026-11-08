@@ -8,16 +8,16 @@ Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governanç
 
 <p align="center">
   <!-- Linha 1: Core Frameworks & Linguagens -->
-  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.0-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"></a>
-  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19.0-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"></a>
+  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.0-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"></a>
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
-  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"></a>
   <br>
   <!-- Linha 2: Arquitetura de IA Local & Quality Engineering -->
-  <a href="https://ollama.com/"><img src="https://img.shields.io/badge/Ollama-Offline_Inference-111111?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama"></a>
-  <a href="https://huggingface.co/Qwen"><img src="https://img.shields.io/badge/Qwen_3.5-9B_--_65K_Context-7C3AED?style=for-the-badge&logo=huggingface&logoColor=white" alt="Qwen 3.5"></a>
-  <a href="https://vercel.com/"><img src="https://img.shields.io/badge/Vercel-Edge_Deploy-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel"></a>
-  <a href="https://github.com/Rafael-TOZATO"><img src="https://img.shields.io/badge/QA_%26_Automation-Quality_Gate-00599C?style=for-the-badge&logo=githubactions&logoColor=white" alt="QA Automation"></a>
+  <a href="https://ollama.com/"><img src="https://img.shields.io/badge/Ollama-Offline_Inference-FF6F61?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama"></a>
+  <a href="https://huggingface.co/Qwen"><img src="https://img.shields.io/badge/Qwen_3.5-9B--65K_Context-8A2BE2?style=for-the-badge&logo=huggingface&logoColor=white" alt="Qwen 3.5"></a>
+  <a href="https://vercel.com/"><img src="https://img.shields.io/badge/Vercel-Edge_Deploy-232323?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel"></a>
+  <a href="https://github.com/Rafael-TOZATO"><img src="https://img.shields.io/badge/QA_%26_Automation-Quality_Gate-2E8B57?style=for-the-badge&logo=githubactions&logoColor=white" alt="QA Automation"></a>
 </p>
 
 ---
