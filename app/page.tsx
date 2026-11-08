@@ -26,9 +26,11 @@ export default function Page() {
       });
 
       const data = await response.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.reply || data.output || "Resposta recebida." }]);
+      if (!response.ok) throw new Error(data.error || "Falha na API.");
+      setMessages((prev) => [...prev, { role: "assistant", content: data.answer || data.reply || data.output || "Resposta recebida." }]);
     } catch (error) {
-      setMessages((prev) => [...prev, { role: "assistant", content: "Erro ao comunicar com a API." }]);
+      const message = error instanceof Error ? error.message : "Erro ao comunicar com a API.";
+      setMessages((prev) => [...prev, { role: "assistant", content: message }]);
     } finally {
       setLoading(false);
     }
