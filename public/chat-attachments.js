@@ -1,6 +1,8 @@
 /**
  * Tozato - Core AI | Anexos do chat: clipe, câmera, microfone e card de link.
  * JavaScript puro, sem dependências. Requer HTTPS (ou localhost) para câmera e microfone.
+ * Atualizado com conversão automática de áudio para WAV 16kHz mono (suporte total ao Gemini)
+ * e remoção de conflito de microfone/ditado.
  *
  * Uso:
  *   import { initChatAttachments } from './chat-attachments.js';
@@ -23,6 +25,36 @@ const ICON = {
 };
 
 const MAX_FILE_MB = 25;
+const MAX_REC_MS = 90000; // Limite de 90 segundos para respeitar o limite de tamanho do payload
+
+async function blobToWav(blob) {
+  const ab = await blob.arrayBuffer();
+  const AC = window.AudioContext || window.webkitAudioContext;
+  const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  const ctx = new AC();
+  const decoded = await new Promise((res, rej) => ctx.decodeAudioData(ab, res, rej));
+  ctx.close();
+  const rate = 16000;
+  const off = new OAC(1, Math.max(1, Math.ceil(decoded.duration * rate)), rate);
+  const src = off.createBufferSource();
+  src.buffer = decoded;
+  src.connect(off.destination);
+  src.start();
+  const rendered = await off.startRendering();
+  const pcm = rendered.getChannelData(0);
+  const view = new DataView(new ArrayBuffer(44 + pcm.length * 2));
+  const w = (o, s) => { for (let i = 0; i < s.length; i++) view.setUint8(o + i, s.charCodeAt(i)); };
+  w(0, 'RIFF'); view.setUint32(4, 36 + pcm.length * 2, true); w(8, 'WAVE');
+  w(12, 'fmt '); view.setUint32(16, 16, true); view.setInt16(20, 1, true);
+  view.setInt16(22, 1, true); view.setUint32(24, rate, true);
+  view.setUint32(28, rate * 2, true); view.setUint16(32, 2, true); view.setInt16(34, 16, true);
+  w(36, 'data'); view.setUint32(40, pcm.length * 2, true);
+  for (let i = 0; i < pcm.length; i++) {
+    const s = Math.max(-1, Math.min(1, pcm[i]));
+    view.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+  return new Blob([view], { type: 'audio/wav' });
+}
 
 export function initChatAttachments(opts = {}) {
   const cfg = {
@@ -34,7 +66,7 @@ export function initChatAttachments(opts = {}) {
     cardDescription: 'Transforme ideias em impacto',
     maxFileMB: MAX_FILE_MB,
     trayBefore: false, // true: bandeja de anexos acima do elemento `form`
-    transcribe: true, // ditado por voz (Web Speech API) quando disponível
+    transcribe: false, // desativado por padrão para evitar conflito de microfone com MediaRecorder
     lang: 'pt-BR',
     ...opts,
   };
@@ -44,7 +76,7 @@ export function initChatAttachments(opts = {}) {
   if (!form || !input) throw new Error('chat-attachments: form/input não encontrados.');
 
   const files = [];
-  const state = { recorder: null, chunks: [], stream: null, recognition: null };
+  const state = { recorder: null, chunks: [], stream: null, recognition: null, timer: null };
 
   /* ---------- Barra de ferramentas ---------- */
   const bar = document.createElement('div');
@@ -178,27 +210,39 @@ export function initChatAttachments(opts = {}) {
       return;
     }
     try {
-      state.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      state.stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true },
+      });
     } catch { notify('Permissão de microfone negada.'); return; }
 
     state.chunks = [];
-    const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'].find((m) => MediaRecorder.isTypeSupported(m)) || '';
+    const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg']
+      .find((m) => MediaRecorder.isTypeSupported(m)) || '';
     state.recorder = new MediaRecorder(state.stream, mime ? { mimeType: mime } : undefined);
+    
     state.recorder.ondataavailable = (e) => { if (e.data.size) state.chunks.push(e.data); };
-    state.recorder.onstop = () => {
-      const type = state.recorder.mimeType || 'audio/webm';
-      const ext = type.includes('mp4') ? 'm4a' : type.includes('ogg') ? 'ogg' : 'webm';
-      const blob = new Blob(state.chunks, { type });
+    state.recorder.onstop = async () => {
+      clearTimeout(state.timer);
+      const type = (state.recorder.mimeType || 'audio/webm').split(';')[0];
+      const raw = new Blob(state.chunks, { type });
       state.stream.getTracks().forEach((t) => t.stop());
       micBtn.classList.remove('is-recording');
       micBtn.innerHTML = ICON.mic;
-      if (blob.size) addFiles([new File([blob], `audio-${Date.now()}.${ext}`, { type })]);
+      if (!raw.size) { notify('Nenhum áudio foi capturado.'); return; }
+      try {
+        const wav = await blobToWav(raw);
+        addFiles([new File([wav], `audio-${Date.now()}.wav`, { type: 'audio/wav' })]);
+      } catch {
+        notify('Não foi possível converter o áudio gravado.');
+      }
     };
-    state.recorder.start();
+
+    state.recorder.start(250);
+    state.timer = setTimeout(stopMic, MAX_REC_MS);
     micBtn.classList.add('is-recording');
     micBtn.innerHTML = ICON.stop;
 
-    // Ditado opcional: transcreve a fala para o campo de texto
+    // Ditado opcional (desativado por padrão por conflitar com o MediaRecorder em alguns navegadores)
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (cfg.transcribe && SR) {
       const base = input.value ? input.value.trimEnd() + ' ' : '';
@@ -216,6 +260,7 @@ export function initChatAttachments(opts = {}) {
   }
 
   function stopMic() {
+    clearTimeout(state.timer);
     if (state.recorder?.state === 'recording') state.recorder.stop();
     if (state.recognition) { try { state.recognition.stop(); } catch {} state.recognition = null; }
   }
