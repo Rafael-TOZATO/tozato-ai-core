@@ -33,7 +33,7 @@ export default function Page() {
     const userMessage = input.trim();
     const submittedFiles = files;
     const displayMessage = submittedFiles.length
-      ? userMessage + (userMessage ? "\\n" : "") + "Anexos: " + submittedFiles.map((file) => file.name).join(", ")
+      ? userMessage + (userMessage ? "\n" : "") + "Anexos: " + submittedFiles.map((file) => file.name).join(", ")
       : userMessage;
 
     const history = messages.slice(-10).map((message) => ({
