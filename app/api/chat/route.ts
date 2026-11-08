@@ -8,7 +8,7 @@ const MAX_FILES = 5
 const MAX_TOTAL_BYTES = 4_000_000 // limite de corpo das Functions da Vercel é 4,5 MB
 const MAX_TEXT_CHARS = 20000
 const MAX_HISTORY = 10
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash"
+const MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash"
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
 
 const SYSTEM_PROMPT =
@@ -20,6 +20,21 @@ const INLINE_TYPES = /^(image\/|audio\/|video\/|application\/pdf$)/
 
 type GPart = { text: string } | { inlineData: { mimeType: string; data: string } }
 type HistoryItem = { role: "user" | "model"; text: string }
+
+function inferMimeType(file: File): string {
+  const supplied = (file.type || "").split(";")[0].toLowerCase()
+  if (supplied && supplied !== "application/octet-stream") return supplied
+
+  const extension = file.name.split(".").pop()?.toLowerCase() || ""
+  const knownTypes: Record<string, string> = {
+    txt: "text/plain", md: "text/markdown", csv: "text/csv", json: "application/json", log: "text/plain",
+    pdf: "application/pdf", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", gif: "image/gif",
+    webp: "image/webp", mp3: "audio/mpeg", wav: "audio/wav", m4a: "audio/mp4", aac: "audio/aac",
+    ogg: "audio/ogg", oga: "audio/ogg", flac: "audio/flac", webm: "audio/webm", mp4: "video/mp4",
+    mov: "video/quicktime", aiff: "audio/aiff",
+  }
+  return knownTypes[extension] || supplied
+}
 
 function parseHistory(raw: unknown): HistoryItem[] {
   let value: unknown = raw
@@ -48,7 +63,7 @@ async function readInput(request: Request) {
   if (contentType.includes("multipart/form-data")) {
     const form = await request.formData()
     const raw = form.get("message")
-    const files = form.getAll("files").filter((f): f is File => typeof f !== "string")
+    const files = [...form.getAll("files"), ...form.getAll("file"), ...form.getAll("audio")].filter((f): f is File => typeof f !== "string")
     return {
       message: typeof raw === "string" ? raw.trim() : "",
       files,
@@ -67,7 +82,7 @@ async function buildParts(message: string, files: File[]): Promise<GPart[]> {
   const parts: GPart[] = []
   let text = message
   for (const file of files) {
-    const mime = (file.type || "").split(";")[0]
+    const mime = inferMimeType(file)
     if (TEXT_TYPES.test(mime) || TEXT_EXT.test(file.name)) {
       const content = (await file.text()).slice(0, MAX_TEXT_CHARS)
       text += `\n\n[Arquivo: ${file.name}]\n${content}`
@@ -84,7 +99,7 @@ async function buildParts(message: string, files: File[]): Promise<GPart[]> {
 }
 
 export async function POST(request: Request) {
-  const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY
+  const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
     return NextResponse.json({ error: "GEMINI_API_KEY não configurada no ambiente." }, { status: 500 })
   }
@@ -133,7 +148,7 @@ export async function POST(request: Request) {
         { status: 502 },
       )
     }
-    return NextResponse.json({ answer })
+    return NextResponse.json({ answer, reply: answer })
   } catch (err) {
     console.error("chat route error", err)
     return NextResponse.json({ error: "Erro interno ao processar a mensagem." }, { status: 500 })

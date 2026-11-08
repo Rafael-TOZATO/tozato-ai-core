@@ -175,72 +175,152 @@ h2{font-size:18px;margin:26px 0 12px}
 </div>
 </section>
 <script>
-var r={
-"power bi":"O dashboard financial-sample-star-schema e o dashboard de gestão de recursos humanos utilizam Power BI.",
-"n8n":"O assistente de investimentos combina RPA em Python, workflow N8N e um nó de agente de IA generativa.",
-"star":"Star Schema organiza o modelo em tabelas dimensão (D_Produtos, D_Calendário) ligadas a uma tabela fato (F_Vendas).",
-"principal":"O projeto principal é o tozato-dev-hub, landing page oficial do TozatoCode-AI com assistente integrado.",
-"artigo":"Os artigos técnicos ficam no Medium, no perfil @ornelas.tozato."
-};
-var log=document.getElementById("log"),q=document.getElementById("q");
-function add(t,c){var d=document.createElement("div");d.className="msg "+c;d.textContent=t;log.appendChild(d);return d}
-async function ask(t){
-t=t.trim();if(!t)return;add(t,"me");
-var w=document.createElement("div");w.className="msg bot typing";w.innerHTML="<span></span><span></span><span></span>";log.appendChild(w);
-try{
-let r_api = await fetch("/api/chat", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:t})});
-let d = await r_api.json();
-if(!r_api.ok) throw new Error(d.error || "Erro na API");
-w.className="msg bot";w.textContent=d.reply;
-}catch(err){
-let k=t.toLowerCase(),ans="Desculpe, não entendi. Tente perguntar sobre Power BI, N8N, Star Schema ou projetos.";
-for(let x in r){if(k.includes(x)){ans=r[x];break;}}
-w.className="msg bot";w.textContent=ans;
-}
-log.scrollTop=log.scrollHeight;
-}
-document.getElementById("chips").onclick=function(e){if(e.target.tagName==="BUTTON")ask(e.target.textContent)};
-document.getElementById("go").onclick=function(){ask(q.value);q.value=""};
-q.onkeydown=function(e){if(e.key==="Enter"){ask(q.value);q.value=""}};
+var log = document.getElementById("log");
+var q = document.getElementById("q");
+var historyItems = [];
+var attachments = [];
+var recorder = null;
+var mediaStream = null;
+var audioChunks = [];
 
-// Ações para os botões (Anexo, Câmera e Microfone)
+function add(text, className) {
+  var node = document.createElement("div");
+  node.className = "msg " + className;
+  node.textContent = text;
+  log.appendChild(node);
+  log.scrollTop = log.scrollHeight;
+  return node;
+}
+
+function addFiles(fileList) {
+  Array.from(fileList || []).forEach(function(file) {
+    if (attachments.length >= 5) return;
+    if (!attachments.some(function(item) {
+      return item.name === file.name && item.size === file.size && item.lastModified === file.lastModified;
+    })) attachments.push(file);
+  });
+}
+
+async function ask(text) {
+  text = (text || "").trim();
+  var files = attachments.slice();
+  if (!text && !files.length) return;
+
+  var displayText = text;
+  if (files.length) displayText += (displayText ? "\n" : "") + "Anexos: " + files.map(function(file) { return file.name; }).join(", ");
+  add(displayText, "me");
+
+  var waiting = document.createElement("div");
+  waiting.className = "msg bot typing";
+  waiting.innerHTML = "<span></span><span></span><span></span>";
+  log.appendChild(waiting);
+  log.scrollTop = log.scrollHeight;
+
+  var formData = new FormData();
+  formData.append("message", text);
+  formData.append("history", JSON.stringify(historyItems.slice(-10)));
+  files.forEach(function(file) {
+    formData.append("files", file, file.name);
+  });
+  attachments = [];
+  document.getElementById("file-input").value = "";
+  document.getElementById("camera-input").value = "";
+
+  try {
+    var response = await fetch("/api/chat", { method: "POST", body: formData });
+    var data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Falha na comunicação com a API.");
+    var answer = data.answer || data.reply;
+    if (!answer) throw new Error("A API não retornou uma resposta válida.");
+    waiting.className = "msg bot";
+    waiting.textContent = answer;
+    historyItems.push({ role: "user", text: text || "[anexo]" });
+    historyItems.push({ role: "model", text: answer });
+  } catch (error) {
+    waiting.className = "msg bot";
+    waiting.textContent = "Erro: " + (error && error.message ? error.message : "Falha na comunicação com a API.");
+  }
+  log.scrollTop = log.scrollHeight;
+}
+
+document.getElementById("chips").onclick = function(event) {
+  if (event.target.tagName === "BUTTON") {
+    q.value = event.target.textContent;
+    ask(q.value);
+    q.value = "";
+  }
+};
+
+document.getElementById("go").onclick = function() {
+  var text = q.value;
+  q.value = "";
+  ask(text);
+};
+
+q.onkeydown = function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    var text = q.value;
+    q.value = "";
+    ask(text);
+  }
+};
+
 document.getElementById("btn-attach").onclick = function() {
   document.getElementById("file-input").click();
 };
-document.getElementById("file-input").onchange = function(e) {
-  if(e.target.files.length > 0) {
-    q.value = "[Arquivo: " + e.target.files[0].name + "]";
-  }
+document.getElementById("file-input").onchange = function(event) {
+  addFiles(event.target.files);
+  event.target.value = "";
 };
 
 document.getElementById("btn-camera").onclick = function() {
   document.getElementById("camera-input").click();
 };
-document.getElementById("camera-input").onchange = function(e) {
-  if(e.target.files.length > 0) {
-    q.value = "[Foto capturada]";
-  }
+document.getElementById("camera-input").onchange = function(event) {
+  addFiles(event.target.files);
+  event.target.value = "";
 };
 
-document.getElementById("btn-mic").onclick = function() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(SpeechRecognition) {
-    const recognition = new SpeechRecognition();
-    recognition.lang = "pt-BR";
-    recognition.start();
-    document.getElementById("btn-mic").style.color = "var(--rd)";
-    recognition.onresult = function(event) {
-      q.value = event.results[0][0].transcript;
-      document.getElementById("btn-mic").style.color = "var(--mu)";
+document.getElementById("btn-mic").onclick = async function() {
+  var button = document.getElementById("btn-mic");
+  if (recorder && recorder.state === "recording") {
+    recorder.stop();
+    button.style.color = "var(--mu)";
+    button.title = "Gravar voz";
+    return;
+  }
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
+    alert("Gravação de áudio não suportada neste navegador.");
+    return;
+  }
+
+  try {
+    mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    var mimeType = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"].find(function(type) {
+      return MediaRecorder.isTypeSupported(type);
+    });
+    recorder = mimeType ? new MediaRecorder(mediaStream, { mimeType: mimeType }) : new MediaRecorder(mediaStream);
+    audioChunks = [];
+    recorder.ondataavailable = function(event) {
+      if (event.data && event.data.size) audioChunks.push(event.data);
     };
-    recognition.onerror = function() {
-      document.getElementById("btn-mic").style.color = "var(--mu)";
+    recorder.onstop = function() {
+      var type = recorder.mimeType || "audio/webm";
+      var extension = type.indexOf("mp4") >= 0 ? "m4a" : "webm";
+      addFiles([new File(audioChunks, "gravacao-" + Date.now() + "." + extension, { type: type })]);
+      if (mediaStream) mediaStream.getTracks().forEach(function(track) { track.stop(); });
+      mediaStream = null;
     };
-    recognition.onend = function() {
-      document.getElementById("btn-mic").style.color = "var(--mu)";
-    };
-  } else {
-    alert("Reconhecimento de voz não suportado neste navegador.");
+    recorder.start();
+    button.style.color = "var(--rd)";
+    button.title = "Parar gravação";
+  } catch (error) {
+    if (mediaStream) mediaStream.getTracks().forEach(function(track) { track.stop(); });
+    mediaStream = null;
+    button.style.color = "var(--mu)";
+    alert("Não foi possível acessar o microfone. Verifique a permissão do navegador.");
   }
 };
 </script>
