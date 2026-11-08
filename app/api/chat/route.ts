@@ -48,7 +48,7 @@ async function readInput(request: Request) {
   if (contentType.includes("multipart/form-data")) {
     const form = await request.formData()
     const raw = form.get("message")
-    const files = form.getAll("files").filter((f): f is File => typeof f !== "string")
+    const files = [...form.getAll("files"), ...form.getAll("file"), ...form.getAll("audio")].filter((f): f is File => typeof f !== "string")
     return {
       message: typeof raw === "string" ? raw.trim() : "",
       files,
@@ -84,7 +84,7 @@ async function buildParts(message: string, files: File[]): Promise<GPart[]> {
 }
 
 export async function POST(request: Request) {
-  const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY
+  const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
     return NextResponse.json({ error: "GEMINI_API_KEY não configurada no ambiente." }, { status: 500 })
   }
@@ -133,7 +133,7 @@ export async function POST(request: Request) {
         { status: 502 },
       )
     }
-    return NextResponse.json({ answer })
+    return NextResponse.json({ answer, reply: answer })
   } catch (err) {
     console.error("chat route error", err)
     return NextResponse.json({ error: "Erro interno ao processar a mensagem." }, { status: 500 })
