@@ -8,7 +8,7 @@ const MAX_FILES = 5
 const MAX_TOTAL_BYTES = 4_000_000 // limite de corpo das Functions da Vercel é 4,5 MB
 const MAX_TEXT_CHARS = 20000
 const MAX_HISTORY = 10
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash"
+const MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash"
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
 
 const SYSTEM_PROMPT =
