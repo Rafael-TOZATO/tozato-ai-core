@@ -56,3 +56,17 @@ OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NO_CLOUD=1 OLLAMA_CONTEXT_LENGTH=65536 ollama
 
 Encontrou algum bug, inconsistência de rota ou tem alguma sugestão de melhoria? 
 Sinta-se à vontade para abrir uma issue utilizando o nosso [Template de Relatório de Bug](../../issues/new?template=bug_report.md). Seu feedback é fundamental para o aprimoramento contínuo deste projeto.
+
+---
+
+## 💻 Projetos e Portfólios
+- **App Ecosystem:** [tozato-ai-core.vercel.app](https://tozato-ai-core.vercel.app)
+- **H-Folio:** [h-folio-l0.vercel.app](https://h-folio-l0.vercel.app)
+
+## 🐙 Código e Repositórios
+- **GitHub:** [github.com/Rafael-TOZATO](https://github.com/Rafael-TOZATO)
+
+## ✍️ Artigos e Publicações
+- **Medium:** [medium.com/@ornelas.tozato](https://medium.com/@ornelas.tozato)
+
+## 📬 Contatos
