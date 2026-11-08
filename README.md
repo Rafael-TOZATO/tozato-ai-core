@@ -51,3 +51,8 @@ Em um terminal dedicado, inicialize o modelo com parâmetros de contexto estendi
 ```bash
 ollama pull qwen3.5:9b
 OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NO_CLOUD=1 OLLAMA_CONTEXT_LENGTH=65536 ollama serve
+
+## Contribuindo e Reportando Problemas
+
+Encontrou algum bug, inconsistência de rota ou tem alguma sugestão de melhoria? 
+Sinta-se à vontade para abrir uma issue utilizando o nosso [Template de Relatório de Bug](../../issues/new?template=bug_report.md). Seu feedback é fundamental para o aprimoramento contínuo deste projeto.
