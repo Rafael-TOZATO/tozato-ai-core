@@ -215,7 +215,7 @@ async function ask(t) {
     if (!r.ok) throw new Error(d.error || d.details || "Erro na API");
     
     w.remove();
-    var answerText = d.reply || d.answer || "Resposta recebida.";
+    var answerText = d.answer || d.reply || "Resposta recebida.";
     add(answerText, "bot");
     
     hist.push({ role: "user", text: t || "[anexo]" });
@@ -247,6 +247,5 @@ inputEl.onkeydown = function(e) {
   }
 };
 </script>
-<script src="/chat-attachments.js"></script>
 </body>
 </html>
