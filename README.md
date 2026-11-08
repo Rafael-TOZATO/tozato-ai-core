@@ -59,14 +59,21 @@ Sinta-se à vontade para abrir uma issue utilizando o nosso [Template de Relató
 
 ---
 
-## 💻 Projetos e Portfólios
+## 💻 PROJETOS E PORTFÓLIOS
 - **App Ecosystem:** [tozato-ai-core.vercel.app](https://tozato-ai-core.vercel.app)
 - **H-Folio:** [h-folio-l0.vercel.app](https://h-folio-l0.vercel.app)
 
-## 🐙 Código e Repositórios
+## 🐙 CÓDIGO E REPOSITÓRIOS
 - **GitHub:** [github.com/Rafael-TOZATO](https://github.com/Rafael-TOZATO)
 
-## ✍️ Artigos e Publicações
+## ✍️ ARTIGOS E PUBLICAÇÕES
 - **Medium:** [medium.com/@ornelas.tozato](https://medium.com/@ornelas.tozato)
 
-## 📬 Contatos
+## 📬 CONTATOS
+- **E-mail:** ornelas.tozato@gmail.com
+- **LinkedIn:** [rafaeltozato81](https://www.linkedin.com/in/rafaeltozato81)
+- **GitHub:** [Rafael-TOZATO](https://github.com/Rafael-TOZATO)
+- **Medium:** [@ornelas.tozato](https://medium.com/@ornelas.tozato)
+- **Dev Hub:** [tozato-ai-core.vercel.app](https://tozato-ai-core.vercel.app)
+- **H-Folio:** [h-folio-l0.vercel.app](https://h-folio-l0.vercel.app)
+- **Microsoft Learn:** [rafaelornelastozato-2209](https://learn.microsoft.com/pt-br/users/rafaelornelastozato-2209)
