@@ -1,318 +1,114 @@
-/**
- * Tozato - Core AI | Anexos do chat: clipe, câmera, microfone e card de link.
- * JavaScript puro, sem dependências. Requer HTTPS (ou localhost) para câmera e microfone.
- * Atualizado com conversão automática de áudio para WAV 16kHz mono (suporte total ao Gemini)
- * e remoção de conflito de microfone/ditado.
- *
- * Uso:
- *   import { initChatAttachments } from './chat-attachments.js';
- *   const att = initChatAttachments({
- *     form: '#chat-form',            // formulário do chat
- *     input: '#chat-input',          // campo de texto
- *     bannerUrl: '/assets/og-image.jpg',
- *     cardHosts: ['github.com/Rafael-TOZATO', location.host],
- *   });
- *   // No envio:  const files = att.getAttachments();  ...  att.clear();
- *   // Ao renderizar uma mensagem:  att.renderLinkCards(elementoDaMensagem);
- */
+import { initChatAttachments } from './chat-attachments.js';
 
-const ICON = {
-  clip: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.1l-9.2 9.2a6 6 0 01-8.5-8.5l9.2-9.2a4 4 0 115.7 5.7l-9.2 9.2a2 2 0 01-2.8-2.8l8.5-8.5"/></svg>',
-  camera: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>',
-  mic: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 01-14 0v-1M12 18v4M8 22h8"/></svg>',
-  stop: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
-  close: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
-};
-
-const MAX_FILE_MB = 25;
-const MAX_REC_MS = 90000; // Limite de 90 segundos para respeitar o limite de tamanho do payload
-
-async function blobToWav(blob) {
-  const ab = await blob.arrayBuffer();
-  const AC = window.AudioContext || window.webkitAudioContext;
-  const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-  const ctx = new AC();
-  const decoded = await new Promise((res, rej) => ctx.decodeAudioData(ab, res, rej));
-  ctx.close();
-  const rate = 16000;
-  const off = new OAC(1, Math.max(1, Math.ceil(decoded.duration * rate)), rate);
-  const src = off.createBufferSource();
-  src.buffer = decoded;
-  src.connect(off.destination);
-  src.start();
-  const rendered = await off.startRendering();
-  const pcm = rendered.getChannelData(0);
-  const view = new DataView(new ArrayBuffer(44 + pcm.length * 2));
-  const w = (o, s) => { for (let i = 0; i < s.length; i++) view.setUint8(o + i, s.charCodeAt(i)); };
-  w(0, 'RIFF'); view.setUint32(4, 36 + pcm.length * 2, true); w(8, 'WAVE');
-  w(12, 'fmt '); view.setUint32(16, 16, true); view.setInt16(20, 1, true);
-  view.setInt16(22, 1, true); view.setUint32(24, rate, true);
-  view.setUint32(28, rate * 2, true); view.setUint16(32, 2, true); view.setInt16(34, 16, true);
-  w(36, 'data'); view.setUint32(40, pcm.length * 2, true);
-  for (let i = 0; i < pcm.length; i++) {
-    const s = Math.max(-1, Math.min(1, pcm[i]));
-    view.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-  }
-  return new Blob([view], { type: 'audio/wav' });
-}
-
-export function initChatAttachments(opts = {}) {
-  const cfg = {
+document.addEventListener('DOMContentLoaded', () => {
+  // Inicializa os anexos do chat conforme a documentação
+  const att = initChatAttachments({
     form: '#chat-form',
     input: '#chat-input',
     bannerUrl: '/assets/og-image.jpg',
-    cardHosts: [location.host],
-    cardTitle: 'Tozato - Core AI',
-    cardDescription: 'Transforme ideias em impacto',
-    maxFileMB: MAX_FILE_MB,
-    trayBefore: false, // true: bandeja de anexos acima do elemento `form`
-    transcribe: false, // desativado por padrão para evitar conflito de microfone com MediaRecorder
-    lang: 'pt-BR',
-    ...opts,
-  };
-
-  const form = document.querySelector(cfg.form);
-  const input = document.querySelector(cfg.input);
-  if (!form || !input) throw new Error('chat-attachments: form/input não encontrados.');
-
-  const files = [];
-  const state = { recorder: null, chunks: [], stream: null, recognition: null, timer: null };
-
-  /* ---------- Barra de ferramentas ---------- */
-  const bar = document.createElement('div');
-  bar.className = 'tca-bar';
-  bar.innerHTML = `
-    <button type="button" class="tca-btn" data-act="clip" aria-label="Anexar arquivo" title="Anexar arquivo">${ICON.clip}</button>
-    <button type="button" class="tca-btn" data-act="camera" aria-label="Câmera" title="Câmera">${ICON.camera}</button>
-    <button type="button" class="tca-btn" data-act="mic" aria-label="Gravar áudio" title="Gravar áudio">${ICON.mic}</button>
-    <input type="file" class="tca-file" multiple hidden
-      accept="image/*,video/*,audio/*,application/pdf,.txt,.md,.csv,.json,.xlsx,.docx,.pptx">
-    <input type="file" class="tca-cam-fallback" accept="image/*" capture="environment" hidden>`;
-  const tray = document.createElement('div');
-  tray.className = 'tca-tray';
-  if (cfg.trayBefore) form.insertAdjacentElement('beforebegin', tray); else form.prepend(tray);
-  input.insertAdjacentElement('beforebegin', bar);
-
-  const fileInput = bar.querySelector('.tca-file');
-  const camFallback = bar.querySelector('.tca-cam-fallback');
-  const micBtn = bar.querySelector('[data-act="mic"]');
-
-  bar.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-act]');
-    if (!btn) return;
-    if (btn.dataset.act === 'clip') fileInput.click();
-    if (btn.dataset.act === 'camera') openCamera();
-    if (btn.dataset.act === 'mic') toggleMic();
+    cardHosts: ['github.com/Rafael-TOZATO', location.host],
   });
 
-  fileInput.addEventListener('change', () => { addFiles([...fileInput.files]); fileInput.value = ''; });
-  camFallback.addEventListener('change', () => { addFiles([...camFallback.files]); camFallback.value = ''; });
+  const form = document.querySelector('#chat-form');
+  const input = document.querySelector('#chat-input');
+  const chatMessages = document.querySelector('#chat-messages') || form.parentElement;
 
-  // Colar imagem da área de transferência
-  input.addEventListener('paste', (e) => {
-    const imgs = [...(e.clipboardData?.files || [])].filter((f) => f.type.startsWith('image/'));
-    if (imgs.length) addFiles(imgs);
-  });
+  if (!form || !input) return;
 
-  /* ---------- Gerenciamento de anexos ---------- */
-  function addFiles(list) {
-    for (const f of list) {
-      if (f.size > cfg.maxFileMB * 1024 * 1024) {
-        notify(`"${f.name}" excede ${cfg.maxFileMB} MB.`);
-        continue;
-      }
-      files.push(f);
-    }
-    renderTray();
-  }
+  // Intercepta o envio do formulário para processar via API do Gemini
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-  function removeFile(i) {
-    files.splice(i, 1);
-    renderTray();
-  }
+    const textValue = input.value.trim();
+    const currentFiles = att.getAttachments();
 
-  function renderTray() {
-    tray.innerHTML = '';
-    files.forEach((f, i) => {
-      const chip = document.createElement('div');
-      chip.className = 'tca-chip';
-      const url = URL.createObjectURL(f);
-      let preview;
-      if (f.type.startsWith('image/')) preview = `<img src="${url}" alt="">`;
-      else if (f.type.startsWith('audio/')) preview = `<audio src="${url}" controls></audio>`;
-      else if (f.type.startsWith('video/')) preview = `<video src="${url}" muted></video>`;
-      else preview = `<span class="tca-ext">${(f.name.split('.').pop() || 'file').slice(0, 4)}</span>`;
-      chip.innerHTML = `${preview}<span class="tca-name"></span><button type="button" class="tca-x" aria-label="Remover">${ICON.close}</button>`;
-      chip.querySelector('.tca-name').textContent = f.name;
-      chip.querySelector('.tca-x').addEventListener('click', () => { URL.revokeObjectURL(url); removeFile(i); });
-      tray.appendChild(chip);
-    });
-    form.dispatchEvent(new CustomEvent('attachments:change', { detail: { count: files.length } }));
-  }
+    if (!textValue && currentFiles.length === 0) return;
 
-  /* ---------- Câmera ---------- */
-  async function openCamera() {
-    if (!navigator.mediaDevices?.getUserMedia) { camFallback.click(); return; }
-    let stream;
+    // 1. Renderiza a mensagem do usuário na tela
+    appendMessage('user', textValue, currentFiles);
+
+    // Limpa o input e a bandeja de anexos visualmente
+    input.value = '';
+    const formData = att.toFormData(textValue);
+    att.clear();
+
+    // 2. Adiciona indicador visual de carregamento ("Pensando...")
+    const loadingId = appendMessage('assistant', 'Pensando...');
+
     try {
-      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-    } catch (err) {
-      camFallback.click(); // permissão negada ou sem câmera: usa seletor nativo
-      return;
-    }
-    const modal = document.createElement('div');
-    modal.className = 'tca-modal';
-    modal.innerHTML = `
-      <div class="tca-modal-box" role="dialog" aria-label="Câmera">
-        <video autoplay playsinline muted></video>
-        <div class="tca-modal-actions">
-          <button type="button" class="tca-secondary" data-a="flip">Trocar câmera</button>
-          <button type="button" class="tca-primary" data-a="shot">Capturar</button>
-          <button type="button" class="tca-secondary" data-a="cancel">Cancelar</button>
-        </div>
-      </div>`;
-    document.body.appendChild(modal);
-    const video = modal.querySelector('video');
-    video.srcObject = stream;
-    let facing = 'environment';
-
-    const close = () => { stream.getTracks().forEach((t) => t.stop()); modal.remove(); };
-
-    modal.addEventListener('click', async (e) => {
-      const a = e.target.dataset.a;
-      if (!a) return;
-      if (a === 'cancel') close();
-      if (a === 'shot') {
-        const c = document.createElement('canvas');
-        c.width = video.videoWidth; c.height = video.videoHeight;
-        c.getContext('2d').drawImage(video, 0, 0);
-        c.toBlob((blob) => {
-          if (blob) addFiles([new File([blob], `foto-${Date.now()}.jpg`, { type: 'image/jpeg' })]);
-          close();
-        }, 'image/jpeg', 0.92);
-      }
-      if (a === 'flip') {
-        facing = facing === 'environment' ? 'user' : 'environment';
-        stream.getTracks().forEach((t) => t.stop());
-        try {
-          stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing }, audio: false });
-          video.srcObject = stream;
-        } catch { notify('Não foi possível trocar de câmera.'); }
-      }
-    });
-  }
-
-  /* ---------- Microfone ---------- */
-  async function toggleMic() {
-    if (state.recorder && state.recorder.state === 'recording') { stopMic(); return; }
-    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
-      notify('Gravação de áudio não suportada neste navegador.');
-      return;
-    }
-    try {
-      state.stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true },
+      // 3. Envia os dados para a API do servidor (Gemini)
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        body: formData, // Envia o texto e os arquivos convertidos (incluindo o WAV)
       });
-    } catch { notify('Permissão de microfone negada.'); return; }
 
-    state.chunks = [];
-    const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg']
-      .find((m) => MediaRecorder.isTypeSupported(m)) || '';
-    state.recorder = new MediaRecorder(state.stream, mime ? { mimeType: mime } : undefined);
-    
-    state.recorder.ondataavailable = (e) => { if (e.data.size) state.chunks.push(e.data); };
-    state.recorder.onstop = async () => {
-      clearTimeout(state.timer);
-      const type = (state.recorder.mimeType || 'audio/webm').split(';')[0];
-      const raw = new Blob(state.chunks, { type });
-      state.stream.getTracks().forEach((t) => t.stop());
-      micBtn.classList.remove('is-recording');
-      micBtn.innerHTML = ICON.mic;
-      if (!raw.size) { notify('Nenhum áudio foi capturado.'); return; }
-      try {
-        const wav = await blobToWav(raw);
-        addFiles([new File([wav], `audio-${Date.now()}.wav`, { type: 'audio/wav' })]);
-      } catch {
-        notify('Não foi possível converter o áudio gravado.');
+      if (!response.ok) {
+        throw new Error(`Erro no servidor: ${response.statusText}`);
       }
-    };
 
-    state.recorder.start(250);
-    state.timer = setTimeout(stopMic, MAX_REC_MS);
-    micBtn.classList.add('is-recording');
-    micBtn.innerHTML = ICON.stop;
+      const data = await response.json();
+      
+      // Remove o indicador de carregamento e exibe a resposta real da IA
+      removeMessage(loadingId);
+      appendMessage('assistant', data.reply || data.text || 'Resposta recebida.');
 
-    // Ditado opcional (desativado por padrão por conflitar com o MediaRecorder em alguns navegadores)
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (cfg.transcribe && SR) {
-      const base = input.value ? input.value.trimEnd() + ' ' : '';
-      const rec = new SR();
-      rec.lang = cfg.lang; rec.interimResults = true; rec.continuous = true;
-      rec.onresult = (ev) => {
-        let txt = '';
-        for (const r of ev.results) txt += r[0].transcript;
-        input.value = base + txt;
-        input.dispatchEvent(new Event('input', { bubbles: true }));
-      };
-      rec.onerror = () => {};
-      try { rec.start(); state.recognition = rec; } catch {}
+    } catch (error) {
+      console.error('[Chat Error]', error);
+      removeMessage(loadingId);
+      appendMessage('assistant', 'Desculpe, ocorreu um erro ao processar sua solicitação com a API.');
     }
-  }
+  });
 
-  function stopMic() {
-    clearTimeout(state.timer);
-    if (state.recorder?.state === 'recording') state.recorder.stop();
-    if (state.recognition) { try { state.recognition.stop(); } catch {} state.recognition = null; }
-  }
+  // Funções auxiliares para manipulação visual das mensagens
+  function appendMessage(sender, text, attachedFiles = []) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-message ${sender}-message`;
+    const msgId = 'msg-' + Date.now() + '-' + Math.random().toString(36.substr(2, 9));
+    msgDiv.id = msgId;
 
-  /* ---------- Card de link ---------- */
-  const URL_RE = /https?:\/\/[^\s<>"')]+/g;
-
-  function matchesHost(u) {
-    const full = u.host + u.pathname;
-    return cfg.cardHosts.some((h) => full.toLowerCase().startsWith(h.toLowerCase()));
-  }
-
-  function renderLinkCards(root) {
-    const text = root.textContent || '';
-    const seen = new Set();
-    for (const raw of text.match(URL_RE) || []) {
-      let u;
-      try { u = new URL(raw); } catch { continue; }
-      if (seen.has(u.href) || !matchesHost(u)) continue;
-      seen.add(u.href);
-      const a = document.createElement('a');
-      a.className = 'tca-card';
-      a.href = u.href; a.target = '_blank'; a.rel = 'noopener noreferrer';
-      a.innerHTML = `
-        <img src="${cfg.bannerUrl}" alt="${cfg.cardTitle}" loading="lazy">
-        <div class="tca-card-body">
-          <strong></strong>
-          <span class="tca-card-desc"></span>
-          <span class="tca-card-host"></span>
-        </div>`;
-      a.querySelector('strong').textContent = cfg.cardTitle;
-      a.querySelector('.tca-card-desc').textContent = cfg.cardDescription;
-      a.querySelector('.tca-card-host').textContent = u.host;
-      root.appendChild(a);
+    let filesHtml = '';
+    if (attachedFiles && attachedFiles.length > 0) {
+      filesHtml = '<div class="msg-attachments-preview">';
+      attachedFiles.forEach(f => {
+        const url = URL.createObjectURL(f);
+        if (f.type.startsWith('image/')) {
+          filesHtml += `<img src="${url}" alt="${f.name}" style="max-width:150px; border-radius:8px; display:block; margin-top:4px;">`;
+        } else if (f.type.startsWith('audio/')) {
+          filesHtml += `<audio src="${url}" controls style="margin-top:4px;"></audio>`;
+        } else {
+          filesHtml += `<span style="font-size:12px; display:block; margin-top:4px;">📎 ${f.name}</span>`;
+        }
+      });
+      filesHtml += '</div>';
     }
+
+    msgDiv.innerHTML = `
+      <div class="msg-content">
+        <p>${escapeHtml(text)}</p>
+        ${filesHtml}
+      </div>
+    `;
+
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Renderiza cards de link se houver URLs na resposta
+    if (sender === 'assistant') {
+      att.renderLinkCards(msgDiv);
+    }
+
+    return msgId;
   }
 
-  function notify(msg) {
-    form.dispatchEvent(new CustomEvent('attachments:error', { detail: msg }));
-    console.warn('[chat-attachments]', msg);
+  function removeMessage(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
   }
 
-  return {
-    getAttachments: () => [...files],
-    /** FormData pronto para fetch(): campo "text" + "files". */
-    toFormData(text = input.value) {
-      const fd = new FormData();
-      fd.append('text', text);
-      files.forEach((f) => fd.append('files', f, f.name));
-      return fd;
-    },
-    clear() { stopMic(); files.length = 0; renderTray(); },
-    renderLinkCards,
-  };
-}
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, 
+      tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+  }
+});
