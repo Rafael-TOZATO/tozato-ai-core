@@ -6,6 +6,15 @@
 
 Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governança de Dados e Inteligência Artificial Local.
 
+<!-- Badges de Métricas de Comunidade -->
+<p align="center">
+  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/stargazers"><img src="https://img.shields.io/github/stars/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=gold" alt="GitHub Stars"></a>
+  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/network/members"><img src="https://img.shields.io/github/forks/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=blue" alt="GitHub Forks"></a>
+  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/issues"><img src="https://img.shields.io/github/issues/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=orange" alt="GitHub Issues"></a>
+  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/commits/main"><img src="https://img.shields.io/github/last-commit/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=git&color=brightgreen" alt="Last Commit"></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/github/license/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&color=informational" alt="License"></a>
+</p>
+
 <p align="center">
   <!-- Linha 1: Core Frameworks & Linguagens -->
   <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.0-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"></a>
@@ -26,7 +35,7 @@ Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governanç
 
 O **Tozato Dev Hub** é uma plataforma distribuída que integra portfólio executivo, central de validações técnicas, métricas de qualidade e um assistente conversacional otimizado para engenharia de software e análise de dados.
 
-Projetado sob os pilares *Privacy-First* e *Offline-First*, o ecossistema permite alternar entre uma interface web de alta disponibilidade (Edge Deployment via Vercel) e um pipeline de inferência 100% local executado via **Ollama API (v1)** com a família de modelos **Qwen3.5 9B**. Essa abordagem híbrida garante processamento autônomo, eliminates custos por consumo de API comercial e assegura total conformidade e soberania sobre os dados.
+Projetado sob os pilares *Privacy-First* e *Offline-First*, o ecossistema permite alternar entre uma interface web de alta disponibilidade (Edge Deployment via Vercel) e um pipeline de inferência 100% local executado via **Ollama API (v1)** com a família de modelos **Qwen3.5 9B**. Essa abordagem híbrida garante processamento autônomo, elimina custos por consumo de API comercial e assegura total conformidade e soberania sobre os dados.
 
 ---
 
@@ -51,29 +60,3 @@ Em um terminal dedicado, inicialize o modelo com parâmetros de contexto estendi
 ```bash
 ollama pull qwen3.5:9b
 OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NO_CLOUD=1 OLLAMA_CONTEXT_LENGTH=65536 ollama serve
-
-## Contribuindo e Reportando Problemas
-
-Encontrou algum bug, inconsistência de rota ou tem alguma sugestão de melhoria? 
-Sinta-se à vontade para abrir uma issue utilizando o nosso [Template de Relatório de Bug](../../issues/new?template=bug_report.md). Seu feedback é fundamental para o aprimoramento contínuo deste projeto.
-
----
-
-## 💻 PROJETOS E PORTFÓLIOS
-- **App Ecosystem:** [tozato-ai-core.vercel.app](https://tozato-ai-core.vercel.app)
-- **H-Folio:** [h-folio-l0.vercel.app](https://h-folio-l0.vercel.app)
-
-## 🐙 CÓDIGO E REPOSITÓRIOS
-- **GitHub:** [github.com/Rafael-TOZATO](https://github.com/Rafael-TOZATO)
-
-## ✍️ ARTIGOS E PUBLICAÇÕES
-- **Medium:** [medium.com/@ornelas.tozato](https://medium.com/@ornelas.tozato)
-
-## 📬 CONTATOS
-- **E-mail:** ornelas.tozato@gmail.com
-- **LinkedIn:** [rafaeltozato81](https://www.linkedin.com/in/rafaeltozato81)
-- **GitHub:** [Rafael-TOZATO](https://github.com/Rafael-TOZATO)
-- **Medium:** [@ornelas.tozato](https://medium.com/@ornelas.tozato)
-- **Dev Hub:** [tozato-ai-core.vercel.app](https://tozato-ai-core.vercel.app)
-- **H-Folio:** [h-folio-l0.vercel.app](https://h-folio-l0.vercel.app)
-- **Microsoft Learn:** [rafaelornelastozato-2209](https://learn.microsoft.com/pt-br/users/rafaelornelastozato-2209)
