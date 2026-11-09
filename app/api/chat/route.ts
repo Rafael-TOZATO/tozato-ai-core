@@ -22,14 +22,15 @@ type GPart = { text: string } | { inlineData: { mimeType: string; data: string }
 type HistoryItem = { role: "user" | "model"; text: string }
 
 function inferMimeType(file: File): string {
+  const extension = file.name.split(".").pop()?.toLowerCase() || ""
+  if (extension === "m4a") return "audio/m4a"
+
   const supplied = (file.type || "").split(";")[0].toLowerCase()
   if (supplied && supplied !== "application/octet-stream") return supplied
-
-  const extension = file.name.split(".").pop()?.toLowerCase() || ""
   const knownTypes: Record<string, string> = {
     txt: "text/plain", md: "text/markdown", csv: "text/csv", json: "application/json", log: "text/plain",
     pdf: "application/pdf", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", gif: "image/gif",
-    webp: "image/webp", mp3: "audio/mpeg", wav: "audio/wav", m4a: "audio/mp4", aac: "audio/aac",
+    webp: "image/webp", mp3: "audio/mpeg", wav: "audio/wav", m4a: "audio/m4a", aac: "audio/aac",
     ogg: "audio/ogg", oga: "audio/ogg", flac: "audio/flac", webm: "audio/webm", mp4: "video/mp4",
     mov: "video/quicktime", aiff: "audio/aiff",
   }
