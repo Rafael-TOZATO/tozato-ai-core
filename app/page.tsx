@@ -7,7 +7,7 @@ type ChatMessage = { role: "user" | "assistant"; content: string };
 
 export default function Page() {
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "assistant", content: "Olá! Sou o assistente do Tozato Dev Hub. Escolha um tema abaixo ou digite sua pergunta." }
+    { role: "assistant", content: "Olá! Sou o assistente do Tozato AI Core. Escolha um tema abaixo ou digite sua pergunta." }
   ]);
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -120,7 +120,7 @@ export default function Page() {
 
   return (
     <main style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto", fontFamily: "sans-serif" }}>
-      <h1>Tozato Dev Hub - Assistente IA</h1>
+      <h1>Tozato AI Core - Assistente IA</h1>
       <div
         style={{ border: "1px solid #ccc", padding: "1rem", minHeight: "300px", maxHeight: "400px", overflowY: "scroll", marginBottom: "1rem", borderRadius: "8px" }}
         onDragOver={(event) => event.preventDefault()}
