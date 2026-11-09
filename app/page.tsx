@@ -160,7 +160,7 @@ export default function Page() {
               if (event.altKey && event.key.toLowerCase() === "m") { event.preventDefault(); void toggleRecording(); }
             }}
             placeholder="Digite sua mensagem..."
-            style={{ flex: 1, padding: "0.75rem 2.75rem 0.75rem 0.75rem", borderRadius: "4px", border: "1px solid #ccc", minWidth: 0 }}
+            style={{ flex: 1, padding: "0.75rem", borderRadius: "4px", border: "1px solid #ccc" }}
           />
           <button
             type="button"
