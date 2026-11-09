@@ -6,26 +6,16 @@
 
 Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governança de Dados e Inteligência Artificial Local.
 
-<!-- Badges de Métricas de Comunidade -->
 <p align="center">
+  <!-- MÁXIMO IMPACTO PROFISSIONAL & ENGAJAMENTO DE GOVERNANÇA -->
+  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/commits/main"><img src="https://img.shields.io/github/last-commit/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=git&color=brightgreen" alt="Last Commit"></a>
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/stargazers"><img src="https://img.shields.io/github/stars/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=gold" alt="GitHub Stars"></a>
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/network/members"><img src="https://img.shields.io/github/forks/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=blue" alt="GitHub Forks"></a>
-  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/issues"><img src="https://img.shields.io/github/issues/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=orange" alt="GitHub Issues"></a>
-  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/commits/main"><img src="https://img.shields.io/github/last-commit/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=git&color=brightgreen" alt="Last Commit"></a>
-  <a href="./LICENSE"><img src="https://img.shields.io/github/license/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&color=informational" alt="License"></a>
-</p>
-
-<p align="center">
-  <!-- Linha 1: Core Frameworks & Linguagens -->
-  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.0-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"></a>
-  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React"></a>
-  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
-  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS"></a>
   <br>
-  <!-- Linha 2: Arquitetura de IA Local & Quality Engineering -->
+  <!-- STACK ARQUITETURAL CORE -->
+  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.0-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
   <a href="https://ollama.com/"><img src="https://img.shields.io/badge/Ollama-Offline_Inference-FF6F61?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama"></a>
-  <a href="https://huggingface.co/Qwen"><img src="https://img.shields.io/badge/Qwen_3.5-9B--65K_Context-8A2BE2?style=for-the-badge&logo=huggingface&logoColor=white" alt="Qwen 3.5"></a>
-  <a href="https://vercel.com/"><img src="https://img.shields.io/badge/Vercel-Edge_Deploy-232323?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel"></a>
   <a href="https://github.com/Rafael-TOZATO"><img src="https://img.shields.io/badge/QA_%26_Automation-Quality_Gate-2E8B57?style=for-the-badge&logo=githubactions&logoColor=white" alt="QA Automation"></a>
 </p>
 
@@ -60,3 +50,40 @@ Em um terminal dedicado, inicialize o modelo com parâmetros de contexto estendi
 ```bash
 ollama pull qwen3.5:9b
 OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NO_CLOUD=1 OLLAMA_CONTEXT_LENGTH=65536 ollama serve
+
+---
+
+## 🤝 Contribuição e Governança
+
+Contribuições e relatos de bugs são bem-vindos para o aprimoramento contínuo da plataforma.
+
+* **Reportar Bugs:** Abra uma [Issue de Bug](https://github.com/Rafael-TOZATO/tozato-ai-core/issues/new?template=bug_report.md) detalhando o comportamento esperado, Logs e ambiente de execução (Ollama / Vercel).
+* **Sugestões de Features:** Abra uma [Issue de Melhoria](https://github.com/Rafael-TOZATO/tozato-ai-core/issues/new?template=feature_request.md).
+* **Pull Requests:** Antes de enviar um PR, certifique-se de vincular a uma issue existente para validação do Quality Gate.
+
+Para mais detalhes sobre os padrões de commits e arquitetura, consulte o nosso [Guia de Contribuição](./CONTRIBUTING.md).
+
+---
+
+## 💻 PROJETOS E PORTFÓLIOS
+- **App Ecosystem:** [tozato-ai-core.vercel.app](https://tozato-ai-core.vercel.app)
+- **H-Folio:** [h-folio-l0.vercel.app](https://h-folio-l0.vercel.app)
+
+---
+
+## 🐙 CÓDIGO E REPOSITÓRIOS
+- **GitHub:** [github.com/Rafael-TOZATO](https://github.com/Rafael-TOZATO)
+
+---
+
+## ✍️ ARTIGOS E PUBLICAÇÕES
+- **Medium:** [medium.com/@ornelas.tozato](https://medium.com/@ornelas.tozato)
+
+---
+
+## 📬 CONTATOS
+- **E-mail:** [ornelas.tozato@gmail.com](mailto:ornelas.tozato@gmail.com)
+- **LinkedIn:** [rafaeltozato81](https://www.linkedin.com/in/rafaeltozato81)
+- **GitHub:** [Rafael-TOZATO](https://github.com/Rafael-TOZATO)
+- **Dev Hub:** [tozato-ai-core.vercel.app](https://tozato-ai-core.vercel.app)
+
