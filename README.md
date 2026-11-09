@@ -50,7 +50,7 @@ Em um terminal dedicado, inicialize o modelo com parâmetros de contexto estendi
 ```bash
 ollama pull qwen3.5:9b
 OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NO_CLOUD=1 OLLAMA_CONTEXT_LENGTH=65536 ollama serve
-
+```
 ---
 
 ## 🤝 Contribuição e Governança
