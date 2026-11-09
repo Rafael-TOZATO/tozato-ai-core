@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Tozato - Core AI | Rafael Ornelas Tozato',
-  description: 'Hub oficial de engenharia de software, QA e inteligência artificial local.',
-  metadataBase: new URL('https://tozato-dev-hub.vercel.app'),
+  title: 'Tozato AI Core',
+  description: 'Assistente de inteligência artificial multimodal Tozato AI Core.',
+  metadataBase: new URL('https://tozato-ai-core.vercel.app'),
   openGraph: {
-    title: 'Tozato - Core AI | Rafael Ornelas Tozato',
-    description: 'Hub oficial de engenharia de software, QA e inteligência artificial local.',
-    url: 'https://tozato-dev-hub.vercel.app',
-    siteName: 'Tozato Core AI',
+    title: 'Tozato AI Core',
+    description: 'Assistente de inteligência artificial multimodal Tozato AI Core.',
+    url: 'https://tozato-ai-core.vercel.app',
+    siteName: 'Tozato AI Core',
     images: [
       {
         url: '/og-image.jpg',
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tozato - Core AI | Rafael Ornelas Tozato',
-    description: 'Hub oficial de engenharia de software, QA e inteligência artificial local.',
+    title: 'Tozato AI Core',
+    description: 'Assistente de inteligência artificial multimodal Tozato AI Core.',
     images: ['/og-image.jpg'],
   },
 }
