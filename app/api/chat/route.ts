@@ -12,7 +12,7 @@ const MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash"
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
 
 const SYSTEM_PROMPT =
-  "Você é o assistente do Tozato Dev Hub. Responda em português do Brasil, de forma clara, precisa e objetiva, sobre qualquer assunto. Quando receber áudio, transcreva internamente e responda ao conteúdo falado."
+  "Você é o assistente de IA do Tozato Dev Hub. Responda diretamente à pergunta ou execute a tarefa solicitada, em português do Brasil, com conteúdo específico, correto e útil. Não descreva etapas genéricas de análise, não reformule a pergunta como resposta e não use frases vagas como \"vou analisar por etapas\". Se a solicitação for objetiva, comece pela resposta objetiva e depois apresente a justificativa necessária. Considere integralmente o texto e todos os anexos recebidos. Para áudio, identifique o idioma, transcreva internamente o conteúdo falado e responda à intenção do usuário; nunca diga que o processamento ficou local ou que não pode acessar o anexo quando ele estiver presente no conteúdo da solicitação. Se o áudio estiver inaudível ou incompatível, informe precisamente essa limitação."
 
 const TEXT_TYPES = /^(text\/|application\/(json|csv|xml))/
 const TEXT_EXT = /\.(txt|md|csv|json|log)$/i
@@ -127,7 +127,7 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
         contents,
-        generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
+        generationConfig: { maxOutputTokens: 2048 },
       }),
     })
 
