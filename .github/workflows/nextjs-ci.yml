@@ -50,7 +50,7 @@ jobs:
           fi
 
       - name: Dependency vulnerability audit
-        run: pnpm audit --audit-level high
+        run: pnpm audit --audit-level moderate
 
       - name: TypeScript validation
         run: pnpm exec tsc --noEmit
@@ -83,7 +83,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Dependency vulnerability audit
-        run: pnpm audit --audit-level high
+        run: pnpm audit --audit-level moderate
 
       - name: TypeScript validation
         run: pnpm exec tsc --noEmit
