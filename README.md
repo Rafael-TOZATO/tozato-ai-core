@@ -11,9 +11,11 @@ Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governanç
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/commits/main"><img src="https://img.shields.io/github/last-commit/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=git&color=brightgreen" alt="Last Commit"></a>
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/stargazers"><img src="https://img.shields.io/github/stars/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=gold" alt="GitHub Stars"></a>
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/network/members"><img src="https://img.shields.io/github/forks/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=blue" alt="GitHub Forks"></a>
+  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/nextjs-ci.yml"><img src="https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/nextjs-ci.yml/badge.svg" alt="Quality Gate"></a>
+  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/codeql.yml"><img src="https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/codeql.yml/badge.svg" alt="CodeQL"></a>
   <br>
   <!-- STACK ARQUITETURAL CORE -->
-  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.0-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"></a>
+  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.4.5-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
   <a href="https://ollama.com/"><img src="https://img.shields.io/badge/Ollama-Offline_Inference-FF6F61?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama"></a>
   <a href="https://github.com/Rafael-TOZATO"><img src="https://img.shields.io/badge/QA_%26_Automation-Quality_Gate-2E8B57?style=for-the-badge&logo=githubactions&logoColor=white" alt="QA Automation"></a>
@@ -62,6 +64,31 @@ Contribuições e relatos de bugs são bem-vindos para o aprimoramento contínuo
 * **Pull Requests:** Antes de enviar um PR, certifique-se de vincular a uma issue existente para validação do Quality Gate.
 
 Para mais detalhes sobre os padrões de commits e arquitetura, consulte o nosso [Guia de Contribuição](./CONTRIBUTING.md).
+
+---
+
+
+## 🔐 Segurança e Governança
+
+O projeto aplica controles preventivos e verificações automatizadas ao código-fonte, às dependências e ao processo de integração contínua, sem interferir na interface visual ou nos componentes de interação.
+
+### Controles implementados
+
+* **API e proteção de dados:** chave Gemini mantida exclusivamente no ambiente do servidor e transmitida pelo cabeçalho `x-goog-api-key`; mensagens limitadas a 8.000 caracteres; até 5 anexos e 4 MB no total; corpo HTTP limitado a 4,4 MB; histórico limitado; timeout de 30 segundos para o serviço externo.
+* **Tratamento de erros:** respostas externas não são repassadas ao cliente nem registradas integralmente nos logs; respostas inválidas, limites excedidos e timeout recebem tratamento específico.
+* **Cabeçalhos HTTP:** proteção contra MIME sniffing, clickjacking e exposição excessiva de referenciador; política de permissões para recursos do navegador; respostas da API sem cache.
+* **Dependências:** Next.js 16.4.5 e React/React DOM 19.2.9, com atualização direcionada para versões corrigidas dos avisos de segurança publicados em novembro de 2026.
+* **Quality Gate:** instalação controlada pelo pnpm, auditoria de vulnerabilidades com bloqueio a partir de severidade alta, validação TypeScript e build de produção.
+* **SAST:** análise estática CodeQL com consultas `security-extended` e `security-and-quality`, executada em push, pull request e agenda semanal.
+* **Governança de dependências:** Dependabot configurado para monitoramento e atualização semanal das dependências de produção e desenvolvimento.
+
+### Verificações automatizadas
+
+- [Quality Gate](https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/nextjs-ci.yml)
+- [CodeQL Security Analysis](https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/codeql.yml)
+- [Dependabot](https://github.com/Rafael-TOZATO/tozato-ai-core/network/updates)
+
+Os indicadores de status no cabeçalho refletem as execuções dos workflows do GitHub Actions. A aprovação final depende da conclusão dos pipelines após cada atualização.
 
 ---
 
