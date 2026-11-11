@@ -5,11 +5,15 @@ export const maxDuration = 60
 
 const MAX_MESSAGE_LENGTH = 8000
 const MAX_FILES = 5
-const MAX_TOTAL_BYTES = 4_000_000 // limite de corpo das Functions da Vercel é 4,5 MB
-const MAX_TEXT_CHARS = 20000
+const MAX_TOTAL_BYTES = 4_000_000
+const MAX_REQUEST_BYTES = 4_400_000
+const MAX_TEXT_CHARS_PER_FILE = 20_000
+const MAX_TOTAL_TEXT_CHARS = 40_000
 const MAX_HISTORY = 10
+const MAX_HISTORY_ITEM_CHARS = 4000
 const MODEL = process.env.GEMINI_MODEL || "gemini-3.8-flash"
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
+const UPSTREAM_TIMEOUT_MS = 30_000
 
 const SYSTEM_PROMPT =
   "Você é o assistente de IA do Tozato AI Core. Responda diretamente à pergunta ou execute a tarefa solicitada, em português do Brasil, com conteúdo específico, correto e útil. Não descreva etapas genéricas de análise, não reformule a pergunta como resposta e não use frases vagas como \"vou analisar por etapas\". Se a solicitação for objetiva, comece pela resposta objetiva e depois apresente a justificativa necessária. Considere integralmente o texto e todos os anexos recebidos. Para áudio, identifique o idioma, transcreva internamente o conteúdo falado e responda à intenção do usuário; nunca diga que o processamento ficou local ou que não pode acessar o anexo quando ele estiver presente no conteúdo da solicitação. Se o áudio estiver inaudível ou incompatível, informe precisamente essa limitação."
@@ -17,9 +21,17 @@ const SYSTEM_PROMPT =
 const TEXT_TYPES = /^(text\/|application\/(json|csv|xml))/
 const TEXT_EXT = /\.(txt|md|csv|json|log)$/i
 const INLINE_TYPES = /^(image\/|audio\/|video\/|application\/pdf$)/
+const MODEL_NAME_PATTERN = /^[a-zA-Z0-9._-]+$/
 
 type GPart = { text: string } | { inlineData: { mimeType: string; data: string } }
 type HistoryItem = { role: "user" | "model"; text: string }
+
+function jsonResponse(body: Record<string, unknown>, status = 200) {
+  return NextResponse.json(body, {
+    status,
+    headers: { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" },
+  })
+}
 
 function inferMimeType(file: File): string {
   const extension = file.name.split(".").pop()?.toLowerCase() || ""
@@ -47,54 +59,70 @@ function parseHistory(raw: unknown): HistoryItem[] {
     }
   }
   if (!Array.isArray(value)) return []
+
   return value
     .filter(
-      (h): h is HistoryItem =>
-        !!h &&
-        (h.role === "user" || h.role === "model") &&
-        typeof h.text === "string" &&
-        h.text.length > 0,
+      (item): item is HistoryItem =>
+        !!item &&
+        (item.role === "user" || item.role === "model") &&
+        typeof item.text === "string" &&
+        item.text.length > 0,
     )
     .slice(-MAX_HISTORY)
-    .map((h) => ({ role: h.role, text: h.text.slice(0, MAX_MESSAGE_LENGTH) }))
+    .map((item) => ({ role: item.role, text: item.text.slice(0, MAX_HISTORY_ITEM_CHARS) }))
 }
 
 async function readInput(request: Request) {
   const contentType = request.headers.get("content-type") || ""
+
   if (contentType.includes("multipart/form-data")) {
     const form = await request.formData()
     const raw = form.get("message")
-    const files = [...form.getAll("files"), ...form.getAll("file"), ...form.getAll("audio")].filter((f): f is File => typeof f !== "string")
+    const files = [...form.getAll("files"), ...form.getAll("file"), ...form.getAll("audio")]
+      .filter((file): file is File => typeof file !== "string")
+
     return {
       message: typeof raw === "string" ? raw.trim() : "",
       files,
       history: parseHistory(form.get("history")),
     }
   }
+
   const body = await request.json()
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    throw new TypeError("Invalid request body")
+  }
+
   return {
-    message: typeof body?.message === "string" ? body.message.trim() : "",
+    message: typeof body.message === "string" ? body.message.trim() : "",
     files: [] as File[],
-    history: parseHistory(body?.history),
+    history: parseHistory(body.history),
   }
 }
 
 async function buildParts(message: string, files: File[]): Promise<GPart[]> {
   const parts: GPart[] = []
   let text = message
+  let totalTextChars = 0
+
   for (const file of files) {
     const mime = inferMimeType(file)
+    const safeName = file.name.replace(/[\u0000-\u001f\u007f]/g, "_").slice(0, 160)
+
     if (TEXT_TYPES.test(mime) || TEXT_EXT.test(file.name)) {
-      const content = (await file.text()).slice(0, MAX_TEXT_CHARS)
-      text += `\n\n[Arquivo: ${file.name}]\n${content}`
+      const remaining = Math.max(0, MAX_TOTAL_TEXT_CHARS - totalTextChars)
+      const content = (await file.text()).slice(0, Math.min(MAX_TEXT_CHARS_PER_FILE, remaining))
+      totalTextChars += content.length
+      text += `\n\n[Arquivo: ${safeName}]\n${content}`
     } else if (INLINE_TYPES.test(mime)) {
       const data = Buffer.from(await file.arrayBuffer()).toString("base64")
       parts.push({ inlineData: { mimeType: mime, data } })
     } else {
-      text += `\n\n[Anexo não suportado: ${file.name} (${mime || "tipo desconhecido"})]`
+      text += `\n\n[Anexo não suportado: ${safeName} (${mime || "tipo desconhecido"})]`
     }
   }
-  const hasAudio = parts.some((p) => "inlineData" in p && p.inlineData.mimeType.startsWith("audio/"))
+
+  const hasAudio = parts.some((part) => "inlineData" in part && part.inlineData.mimeType.startsWith("audio/"))
   const fallback = hasAudio ? "Transcreva o áudio e responda ao conteúdo." : "Analise o anexo."
   return [{ text: text.trim() || fallback }, ...parts]
 }
@@ -102,22 +130,49 @@ async function buildParts(message: string, files: File[]): Promise<GPart[]> {
 export async function POST(request: Request) {
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
-    return NextResponse.json({ error: "GEMINI_API_KEY não configurada no ambiente." }, { status: 500 })
+    return jsonResponse({ error: "Serviço de IA temporariamente indisponível." }, 503)
+  }
+
+  const contentLength = request.headers.get("content-length")
+  if (contentLength !== null) {
+    const parsedLength = Number(contentLength)
+    if (!Number.isSafeInteger(parsedLength) || parsedLength < 0) {
+      return jsonResponse({ error: "Cabeçalho de tamanho da requisição inválido." }, 400)
+    }
+    if (parsedLength > MAX_REQUEST_BYTES) {
+      return jsonResponse({ error: "A requisição excede o limite de 4,4 MB." }, 413)
+    }
+  }
+
+  const contentType = request.headers.get("content-type") || ""
+  if (!contentType.includes("multipart/form-data") && !contentType.includes("application/json")) {
+    return jsonResponse({ error: "Tipo de conteúdo não suportado." }, 415)
   }
 
   try {
-    const { message, files, history } = await readInput(request)
+    if (!MODEL_NAME_PATTERN.test(MODEL)) {
+      return jsonResponse({ error: "Configuração do serviço de IA inválida." }, 503)
+    }
 
-    if (!message && !files.length) return NextResponse.json({ error: "A mensagem não pode ficar vazia." }, { status: 400 })
-    if (message.length > MAX_MESSAGE_LENGTH) return NextResponse.json({ error: "A mensagem excede o limite permitido." }, { status: 413 })
-    if (files.length > MAX_FILES) return NextResponse.json({ error: `Envie no máximo ${MAX_FILES} anexos.` }, { status: 413 })
-    if (files.reduce((s, f) => s + f.size, 0) > MAX_TOTAL_BYTES) {
-      return NextResponse.json({ error: "Os anexos excedem 4 MB no total." }, { status: 413 })
+    let input: Awaited<ReturnType<typeof readInput>>
+    try {
+      input = await readInput(request)
+    } catch {
+      return jsonResponse({ error: "Corpo da requisição inválido." }, 400)
+    }
+
+    const { message, files, history } = input
+
+    if (!message && !files.length) return jsonResponse({ error: "A mensagem não pode ficar vazia." }, 400)
+    if (message.length > MAX_MESSAGE_LENGTH) return jsonResponse({ error: "A mensagem excede o limite permitido." }, 413)
+    if (files.length > MAX_FILES) return jsonResponse({ error: `Envie no máximo ${MAX_FILES} anexos.` }, 413)
+    if (files.some((file) => file.size < 0) || files.reduce((total, file) => total + file.size, 0) > MAX_TOTAL_BYTES) {
+      return jsonResponse({ error: "Os anexos excedem 4 MB no total." }, 413)
     }
 
     const parts = await buildParts(message, files)
     const contents = [
-      ...history.map((h) => ({ role: h.role, parts: [{ text: h.text }] })),
+      ...history.map((item) => ({ role: item.role, parts: [{ text: item.text }] })),
       { role: "user", parts },
     ]
 
@@ -129,29 +184,38 @@ export async function POST(request: Request) {
         contents,
         generationConfig: { maxOutputTokens: 2048 },
       }),
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
     })
 
     if (!response.ok) {
-      console.error("Gemini error", response.status, await response.text())
-      return NextResponse.json({ error: "Falha na comunicação com o Gemini." }, { status: 502 })
+      console.error("Gemini upstream failure", response.status)
+      const status = response.status === 429 ? 503 : 502
+      return jsonResponse({ error: "Falha na comunicação com o serviço de IA." }, status)
     }
 
-    const data = await response.json()
-    const answer: string | undefined = data?.candidates?.[0]?.content?.parts
-      ?.map((p: { text?: string }) => p.text ?? "")
+    let data: unknown
+    try {
+      data = await response.json()
+    } catch {
+      return jsonResponse({ error: "O serviço de IA retornou uma resposta inválida." }, 502)
+    }
+
+    const answer: string | undefined = (data as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> })
+      ?.candidates?.[0]?.content?.parts
+      ?.map((part) => typeof part.text === "string" ? part.text : "")
       .join("")
       .trim()
 
     if (!answer) {
-      const reason = data?.promptFeedback?.blockReason
-      return NextResponse.json(
-        { error: reason ? `Resposta bloqueada pelo Gemini (${reason}).` : "O assistente não retornou uma resposta." },
-        { status: 502 },
-      )
+      return jsonResponse({ error: "O assistente não retornou uma resposta utilizável." }, 502)
     }
-    return NextResponse.json({ answer, reply: answer })
-  } catch (err) {
-    console.error("chat route error", err)
-    return NextResponse.json({ error: "Erro interno ao processar a mensagem." }, { status: 500 })
+
+    return jsonResponse({ answer, reply: answer })
+  } catch (error) {
+    if (error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")) {
+      return jsonResponse({ error: "O serviço de IA excedeu o tempo limite de resposta." }, 504)
+    }
+    console.error("chat route failure", error instanceof Error ? error.name : "UnknownError")
+    return jsonResponse({ error: "Erro interno ao processar a mensagem." }, 500)
   }
 }
