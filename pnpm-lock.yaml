@@ -8,6 +8,7 @@ overrides:
   nanoid: 3.3.18
   browserslist: 4.28.7
   source-map-js: 1.2.2
+  baseline-browser-mapping: 2.11.0
 
 importers:
 
@@ -57,8 +58,8 @@ importers:
         specifier: ^19
         version: 19.2.3(@types/react@19.2.14)
       postcss:
-        specifier: 8.5.18
-        version: 8.5.18
+        specifier: 8.5.23
+        version: 8.5.23
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
@@ -556,13 +557,9 @@ packages:
       vue-router:
         optional: true
 
-  baseline-browser-mapping@2.11.35:
-    resolution: {integrity: sha512-GNk8KX52CHqeNKGk8+7tZnQab/2k1t/BgrUHPKNdijzpEhF1saPQZHVKb6m5loSAxB39gyrTYw34Qf9CQ3u1qQ==}
+  baseline-browser-mapping@2.11.0:
+    resolution: {integrity: sha512-oCu2wfipvX3AePSgmOuKkIywOu+8n9psz7hXYmk56ghpu3+7KzNIBopaOs4c9BrtdnTtW30unG9GTfHo7EwERQ==}
     engines: {node: '>=6.0.0'}
-    hasBin: true
-
-  baseline-browser-mapping@2.9.19:
-    resolution: {integrity: sha512-ipDqC8FrAl/76p2SSWKSI+H9tFwm7vYqXQrItCuiVPt26Km0jS+NzSsBWAaBusvSbQcfJG+JitdMm+wZAgTYqg==}
     hasBin: true
 
   browserslist@4.28.7:
@@ -763,14 +760,6 @@ packages:
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
-
-  postcss@8.5.18:
-    resolution: {integrity: sha512-xdB1oSLHbz1vRWgCDalrCqEFTWzFlhqFC5tIHLMOSUIjhm3XXQ1qrFy8S/ESr1JYRRXqM3c1QFiMZUJdUTqyMQ==}
-    engines: {node: ^10 || ^12 || >=14}
-
-  postcss@8.5.19:
-    resolution: {integrity: sha512-Mz8SaolMd8nB+G13WkORcxQKHZ/NE4xXevtkJHVuG+guo9/wYKlIMTKAqGdEmYOXR2ijPjTYNHssizdaVSUNdQ==}
-    engines: {node: ^10 || ^12 || >=14}
 
   postcss@8.5.23:
     resolution: {integrity: sha512-g50586zr4bZmwFiTlflMu8E0bDTb5I5gertgwAKmsdUlTQIhZtunzUlD1WSzwcVWPoAVpsrA6vlfCD7oXvRwgg==}
@@ -1258,7 +1247,7 @@ snapshots:
       '@alloc/quick-lru': 5.2.0
       '@tailwindcss/node': 4.3.3
       '@tailwindcss/oxide': 4.3.3
-      postcss: 8.5.19
+      postcss: 8.5.23
       tailwindcss: 4.3.3
 
   '@types/node@24.10.4':
@@ -1278,14 +1267,11 @@ snapshots:
       next: 16.4.5(@babel/core@7.29.7)(@types/node@24.10.4)(react-dom@19.2.9(react@19.2.9))(react@19.2.9)
       react: 19.2.9
 
-  baseline-browser-mapping@2.11.35:
-    optional: true
-
-  baseline-browser-mapping@2.9.19: {}
+  baseline-browser-mapping@2.11.0: {}
 
   browserslist@4.28.7:
     dependencies:
-      baseline-browser-mapping: 2.11.35
+      baseline-browser-mapping: 2.11.0
       caniuse-lite: 1.0.30001823
       electron-to-chromium: 1.5.479
       node-releases: 2.0.63
@@ -1418,7 +1404,7 @@ snapshots:
     dependencies:
       '@next/env': 16.4.5
       '@swc/helpers': 0.5.23
-      baseline-browser-mapping: 2.9.19
+      baseline-browser-mapping: 2.11.0
       caniuse-lite: 1.0.30001769
       postcss: 8.5.23
       react: 19.2.9
@@ -1443,18 +1429,6 @@ snapshots:
     optional: true
 
   picocolors@1.1.1: {}
-
-  postcss@8.5.18:
-    dependencies:
-      nanoid: 3.3.18
-      picocolors: 1.1.1
-      source-map-js: 1.2.2
-
-  postcss@8.5.19:
-    dependencies:
-      nanoid: 3.3.18
-      picocolors: 1.1.1
-      source-map-js: 1.2.2
 
   postcss@8.5.23:
     dependencies:
