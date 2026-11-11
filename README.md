@@ -74,13 +74,14 @@ O projeto aplica controles preventivos e verificações automatizadas ao código
 
 ### Controles implementados
 
-* **API e proteção de dados:** chave Gemini mantida exclusivamente no ambiente do servidor e transmitida pelo cabeçalho `x-goog-api-key`; mensagens limitadas a 8.000 caracteres; até 5 anexos e 4 MB no total; corpo HTTP limitado a 4,4 MB; histórico limitado; timeout de 30 segundos para o serviço externo.
+* **API e proteção de dados:** chave Gemini mantida exclusivamente no ambiente do servidor e transmitida pelo cabeçalho `x-goog-api-key`; origem do navegador validada para o domínio de produção e previews da Vercel; mensagens limitadas a 8.000 caracteres; até 5 anexos e 4 MB no total; corpo HTTP limitado a 4,4 MB; histórico limitado; timeout de 30 segundos para o serviço externo.
 * **Tratamento de erros:** respostas externas não são repassadas ao cliente nem registradas integralmente nos logs; respostas inválidas, limites excedidos e timeout recebem tratamento específico.
 * **Cabeçalhos HTTP:** proteção contra MIME sniffing, clickjacking e exposição excessiva de referenciador; política de permissões para recursos do navegador; respostas da API sem cache.
 * **Dependências:** Next.js 16.4.5 e React/React DOM 19.2.9, com atualização direcionada para versões corrigidas dos avisos de segurança publicados em novembro de 2026.
-* **Quality Gate:** instalação controlada pelo pnpm, auditoria de vulnerabilidades com bloqueio a partir de severidade alta, validação TypeScript e build de produção.
+* **Quality Gate:** instalação controlada pelo pnpm, auditoria de vulnerabilidades com bloqueio a partir de severidade moderada, validação TypeScript e build de produção.
 * **SAST:** análise estática CodeQL com consultas `security-extended` e `security-and-quality`, executada em push, pull request e agenda semanal.
 * **Governança de dependências:** Dependabot configurado para monitoramento e atualização semanal das dependências de produção e desenvolvimento.
+* **Limitação operacional identificada:** não há rate limiting distribuído por IP configurado no repositório. Esse controle requer uma política WAF ou um serviço de limitação compartilhado na camada de hospedagem.
 
 ### Verificações automatizadas
 
