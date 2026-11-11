@@ -7,17 +7,17 @@ on:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 concurrency:
   group: quality-gate-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  quality-gate:
-    name: Quality Gate
+  quality-gate-main:
+    name: Quality Gate - main
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,16 +35,10 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Install dependencies and synchronize lockfile on main
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Install dependencies and synchronize lockfile
         run: pnpm install --no-frozen-lockfile
 
-      - name: Install dependencies with frozen lockfile
-        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
-        run: pnpm install --frozen-lockfile
-
       - name: Commit synchronized lockfile
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           if ! git diff --quiet -- pnpm-lock.yaml; then
             git config user.name "github-actions[bot]"
@@ -53,6 +47,39 @@ jobs:
             git commit -m "chore(deps): synchronize pnpm lockfile"
             git push origin HEAD:main
           fi
+
+      - name: Dependency vulnerability audit
+        run: pnpm audit --audit-level high
+
+      - name: TypeScript validation
+        run: pnpm exec tsc --noEmit
+
+      - name: Next.js production build
+        run: pnpm build
+
+  quality-gate-pull-request:
+    name: Quality Gate - pull request
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.3.4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Dependency vulnerability audit
         run: pnpm audit --audit-level high
