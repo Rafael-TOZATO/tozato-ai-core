@@ -1,36 +1,64 @@
-name: Next.js CI
+name: Next.js Quality Gate
 
 on:
-  pull_request:
-    branches: [main]
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: nextjs-ci-${{ github.ref }}
+  group: quality-gate-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  quality-gate:
+    name: Quality Gate
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 12.3.4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-      - name: Install dependencies
+
+      - name: Install dependencies and synchronize lockfile on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Install dependencies with frozen lockfile
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main'
         run: pnpm install --frozen-lockfile
+
+      - name: Commit synchronized lockfile
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          if ! git diff --quiet -- pnpm-lock.yaml; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add pnpm-lock.yaml
+            git commit -m "chore(deps): synchronize pnpm lockfile"
+            git push origin HEAD:main
+          fi
+
+      - name: Dependency vulnerability audit
+        run: pnpm audit --audit-level high
+
       - name: TypeScript validation
         run: pnpm exec tsc --noEmit
+
       - name: Next.js production build
         run: pnpm build
