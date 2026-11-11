@@ -22,6 +22,10 @@ const TEXT_TYPES = /^(text\/|application\/(json|csv|xml))/
 const TEXT_EXT = /\.(txt|md|csv|json|log)$/i
 const INLINE_TYPES = /^(image\/|audio\/|video\/|application\/pdf$)/
 const MODEL_NAME_PATTERN = /^[a-zA-Z0-9._-]+$/
+const ALLOWED_ORIGINS = new Set([
+  "https://tozato-ai-core.vercel.app",
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
+].filter(Boolean))
 
 type GPart = { text: string } | { inlineData: { mimeType: string; data: string } }
 type HistoryItem = { role: "user" | "model"; text: string }
@@ -142,6 +146,11 @@ export async function POST(request: Request) {
     if (parsedLength > MAX_REQUEST_BYTES) {
       return jsonResponse({ error: "A requisição excede o limite de 4,4 MB." }, 413)
     }
+  }
+
+  const origin = request.headers.get("origin")
+  if (origin && !ALLOWED_ORIGINS.has(origin)) {
+    return jsonResponse({ error: "Origem da requisição não autorizada." }, 403)
   }
 
   const contentType = request.headers.get("content-type") || ""
