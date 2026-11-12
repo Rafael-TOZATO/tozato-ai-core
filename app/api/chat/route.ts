@@ -76,11 +76,38 @@ function parseHistory(raw: unknown): HistoryItem[] {
     .map((item) => ({ role: item.role, text: item.text.slice(0, MAX_HISTORY_ITEM_CHARS) }))
 }
 
-async function readInput(request: Request) {
-  const contentType = request.headers.get("content-type") || ""
+class RequestBodyTooLargeError extends Error {}
 
+async function readBoundedBody(request: Request): Promise<Buffer> {
+  const reader = request.body?.getReader()
+  if (!reader) return Buffer.alloc(0)
+
+  const chunks: Buffer[] = []
+  let totalBytes = 0
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      totalBytes += value.byteLength
+      if (totalBytes > MAX_REQUEST_BYTES) {
+        await reader.cancel().catch(() => undefined)
+        throw new RequestBodyTooLargeError()
+      }
+
+      chunks.push(Buffer.from(value))
+    }
+  } finally {
+    reader.releaseLock()
+  }
+
+  return Buffer.concat(chunks, totalBytes)
+}
+
+async function readInput(contentType: string, body: Buffer) {
   if (contentType.includes("multipart/form-data")) {
-    const form = await request.formData()
+    const form = await new Response(body, { headers: { "Content-Type": contentType } }).formData()
     const raw = form.get("message")
     const files = [...form.getAll("files"), ...form.getAll("file"), ...form.getAll("audio")]
       .filter((file): file is File => typeof file !== "string")
@@ -92,15 +119,16 @@ async function readInput(request: Request) {
     }
   }
 
-  const body = await request.json()
-  if (!body || typeof body !== "object" || Array.isArray(body)) {
+  const parsedBody: unknown = JSON.parse(body.toString("utf8"))
+  if (!parsedBody || typeof parsedBody !== "object" || Array.isArray(parsedBody)) {
     throw new TypeError("Invalid request body")
   }
 
+  const bodyObject = parsedBody as Record<string, unknown>
   return {
-    message: typeof body.message === "string" ? body.message.trim() : "",
+    message: typeof bodyObject.message === "string" ? bodyObject.message.trim() : "",
     files: [] as File[],
-    history: parseHistory(body.history),
+    history: parseHistory(bodyObject.history),
   }
 }
 
@@ -158,6 +186,16 @@ export async function POST(request: Request) {
     return jsonResponse({ error: "Tipo de conteúdo não suportado." }, 415)
   }
 
+  let requestBody: Buffer
+  try {
+    requestBody = await readBoundedBody(request)
+  } catch (error) {
+    if (error instanceof RequestBodyTooLargeError) {
+      return jsonResponse({ error: "A requisição excede o limite de 4,4 MB." }, 413)
+    }
+    return jsonResponse({ error: "Corpo da requisição inválido." }, 400)
+  }
+
   try {
     if (!MODEL_NAME_PATTERN.test(MODEL)) {
       return jsonResponse({ error: "Configuração do serviço de IA inválida." }, 503)
@@ -165,7 +203,7 @@ export async function POST(request: Request) {
 
     let input: Awaited<ReturnType<typeof readInput>>
     try {
-      input = await readInput(request)
+      input = await readInput(contentType, requestBody)
     } catch {
       return jsonResponse({ error: "Corpo da requisição inválido." }, 400)
     }
