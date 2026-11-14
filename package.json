@@ -1,32 +1,88 @@
-{
-  "name": "my-project",
-  "version": "0.1.0",
-  "private": true,
-  "packageManager": "pnpm@12.3.4",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "@base-ui/react": "^1.5.0",
-    "@vercel/analytics": "1.6.1",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^1.16.0",
-    "next": "16.4.5",
-    "react": "19.2.9",
-    "react-dom": "19.2.9",
-    "tailwind-merge": "^3.3.1",
-    "tw-animate-css": "^1.4.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.3",
-    "@types/node": "^24",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "postcss": "8.5.23",
-    "tailwindcss": "^4.3.3",
-    "typescript": "5.7.3"
-  }
-}
+From b2d81ef610da6a35394f9a5dfa3e48b485cb5322 Mon Sep 17 00:00:00 2001
+From: Rafael Ornelas Tozato <ornelas.tozato@gmail.com>
+Date: Sat, 14 Nov 2026 02:23:16 +0000
+Subject: [PATCH] chore(deps): bump typescript to 5.9.3 and align Response body
+ typing
+
+---
+ README.md             |  2 +-
+ app/api/chat/route.ts |  2 +-
+ package.json          |  2 +-
+ pnpm-lock.yaml        | 10 +++++-----
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/README.md b/README.md
+index e896d07..fb30a7d 100644
+--- a/README.md
++++ b/README.md
+@@ -16,7 +16,7 @@ Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governanç
+   <br>
+   <!-- STACK ARQUITETURAL CORE -->
+   <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.4.5-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"></a>
+-  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
++  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
+   <a href="https://ollama.com/"><img src="https://img.shields.io/badge/Ollama-Offline_Inference-FF6F61?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama"></a>
+   <a href="https://github.com/Rafael-TOZATO"><img src="https://img.shields.io/badge/QA_%26_Automation-Quality_Gate-2E8B57?style=for-the-badge&logo=githubactions&logoColor=white" alt="QA Automation"></a>
+ </p>
+diff --git a/app/api/chat/route.ts b/app/api/chat/route.ts
+index 029f13f..27df8ce 100644
+--- a/app/api/chat/route.ts
++++ b/app/api/chat/route.ts
+@@ -107,7 +107,7 @@ async function readBoundedBody(request: Request): Promise<Buffer> {
+ 
+ async function readInput(contentType: string, body: Buffer) {
+   if (contentType.includes("multipart/form-data")) {
+-    const form = await new Response(body, { headers: { "Content-Type": contentType } }).formData()
++    const form = await new Response(new Uint8Array(body), { headers: { "Content-Type": contentType } }).formData()
+     const raw = form.get("message")
+     const files = [...form.getAll("files"), ...form.getAll("file"), ...form.getAll("audio")]
+       .filter((file): file is File => typeof file !== "string")
+diff --git a/package.json b/package.json
+index 26a947e..9ef037c 100644
+--- a/package.json
++++ b/package.json
+@@ -27,6 +27,6 @@
+     "@types/react-dom": "^19",
+     "postcss": "8.5.23",
+     "tailwindcss": "^4.3.3",
+-    "typescript": "5.7.3"
++    "typescript": "5.9.3"
+   }
+ }
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index ff396aa..9c3239d 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -65,8 +65,8 @@ importers:
+         specifier: ^4.3.3
+         version: 4.3.3
+       typescript:
+-        specifier: 5.7.3
+-        version: 5.7.3
++        specifier: 5.9.3
++        version: 5.9.3
+ 
+ packages:
+ 
+@@ -832,8 +832,8 @@ packages:
+   tw-animate-css@1.4.0:
+     resolution: {integrity: sha512-7bziOlRqH0hJx80h/3mbicLW7o8qLsH5+RaLR2t+OHM3D0JlWGODQKQ4cxbK7WlvmUxpcj6Kgu6EKqjrGFe3QQ==}
+ 
+-  typescript@5.7.3:
+-    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
++  typescript@5.9.3:
++    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+     engines: {node: '>=14.17'}
+     hasBin: true
+ 
+@@ -1507,7 +1507,7 @@ snapshots:
+ 
+   tw-animate-css@1.4.0: {}
+ 
+-  typescript@5.7.3: {}
++  typescript@5.9.3: {}
+ 
+   undici-types@7.16.0: {}
+ 
+-- 
+2.43.0
