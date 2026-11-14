@@ -107,7 +107,7 @@ async function readBoundedBody(request: Request): Promise<Buffer> {
 
 async function readInput(contentType: string, body: Buffer) {
   if (contentType.includes("multipart/form-data")) {
-    const form = await new Response(body, { headers: { "Content-Type": contentType } }).formData()
+    const form = await new Response(new Uint8Array(body), { headers: { "Content-Type": contentType } }).formData()
     const raw = form.get("message")
     const files = [...form.getAll("files"), ...form.getAll("file"), ...form.getAll("audio")]
       .filter((file): file is File => typeof file !== "string")
