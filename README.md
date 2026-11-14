@@ -16,7 +16,7 @@ Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governanç
   <br>
   <!-- STACK ARQUITETURAL CORE -->
   <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.4.5-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js"></a>
-  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript"></a>
   <a href="https://ollama.com/"><img src="https://img.shields.io/badge/Ollama-Offline_Inference-FF6F61?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama"></a>
   <a href="https://github.com/Rafael-TOZATO"><img src="https://img.shields.io/badge/QA_%26_Automation-Quality_Gate-2E8B57?style=for-the-badge&logo=githubactions&logoColor=white" alt="QA Automation"></a>
 </p>
