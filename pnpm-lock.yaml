@@ -19,8 +19,8 @@ importers:
         specifier: ^1.5.0
         version: 1.5.0(@date-fns/tz@1.4.1)(@types/react@19.2.14)(date-fns@4.1.0)(react-dom@19.2.9(react@19.2.9))(react@19.2.9)
       '@vercel/analytics':
-        specifier: 1.6.1
-        version: 1.6.1(next@16.4.5(@babel/core@7.29.7)(@types/node@24.10.4)(react-dom@19.2.9(react@19.2.9))(react@19.2.9))(react@19.2.9)
+        specifier: 2.0.1
+        version: 2.0.1(next@16.4.5(@babel/core@7.29.7)(@types/node@24.10.4)(react-dom@19.2.9(react@19.2.9))(react@19.2.9))(react@19.2.9)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -532,12 +532,13 @@ packages:
   '@types/react@19.2.14':
     resolution: {integrity: sha512-ilcTH/UniCkMdtexkoCN0bI7pMcJDvmQFPvuPvmEaYA/NSfFTAgdUSLAoVjaRJm7+6PvcM+q1zYOwS4wTYMF9w==}
 
-  '@vercel/analytics@1.6.1':
-    resolution: {integrity: sha512-oH9He/bEM+6oKlv3chWuOOcp8Y6fo6/PSro8hEkgCW3pu9/OiCXiUpRUogDh3Fs3LH2sosDrx8CxeOLBEE+afg==}
+  '@vercel/analytics@2.0.1':
+    resolution: {integrity: sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g==}
     peerDependencies:
       '@remix-run/react': ^2
       '@sveltejs/kit': ^1 || ^2
       next: '>= 13'
+      nuxt: '>= 3'
       react: ^18 || ^19 || ^19.0.0-rc
       svelte: '>= 4'
       vue: ^3
@@ -548,6 +549,8 @@ packages:
       '@sveltejs/kit':
         optional: true
       next:
+        optional: true
+      nuxt:
         optional: true
       react:
         optional: true
@@ -606,8 +609,8 @@ packages:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
 
-  electron-to-chromium@1.5.479:
-    resolution: {integrity: sha512-uAJdJQ7vHa4TvPfzt1TOqoRgHmav5gwmqHMPLxBH6m8Cbj5R9/z/rygTOQiZ8pe5g0ZAEogga1bP6HoKcOzx/Q==}
+  electron-to-chromium@1.5.478:
+    resolution: {integrity: sha512-pftG+ma5Lm8O6/p45bhYT6StBN5ziQymaRzmCZwFl8DwWHKPPD93FdOmP1aqftcepolQYvrcyTLa17kE8Yf+jg==}
 
   enhanced-resolve@5.24.2:
     resolution: {integrity: sha512-rpsZEGT1jFuve6QlpyRp9ckQ+kN61hvF9BzCPyMdaKTm8UJce96KBn3sorXOFXlzjPrs3Vc4T1NsSroZ3PxlFw==}
@@ -1263,7 +1266,7 @@ snapshots:
     dependencies:
       csstype: 3.2.3
 
-  '@vercel/analytics@1.6.1(next@16.4.5(@babel/core@7.29.7)(@types/node@24.10.4)(react-dom@19.2.9(react@19.2.9))(react@19.2.9))(react@19.2.9)':
+  '@vercel/analytics@2.0.1(next@16.4.5(@babel/core@7.29.7)(@types/node@24.10.4)(react-dom@19.2.9(react@19.2.9))(react@19.2.9))(react@19.2.9)':
     optionalDependencies:
       next: 16.4.5(@babel/core@7.29.7)(@types/node@24.10.4)(react-dom@19.2.9(react@19.2.9))(react@19.2.9)
       react: 19.2.9
@@ -1274,7 +1277,7 @@ snapshots:
     dependencies:
       baseline-browser-mapping: 2.11.0
       caniuse-lite: 1.0.30001823
-      electron-to-chromium: 1.5.479
+      electron-to-chromium: 1.5.478
       node-releases: 2.0.63
       update-browserslist-db: 1.2.3(browserslist@4.28.7)
     optional: true
@@ -1307,7 +1310,7 @@ snapshots:
 
   detect-libc@2.1.2: {}
 
-  electron-to-chromium@1.5.479:
+  electron-to-chromium@1.5.478:
     optional: true
 
   enhanced-resolve@5.24.2:
