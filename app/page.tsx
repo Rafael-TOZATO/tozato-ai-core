@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
+import MetricsDashboard from "@/components/MetricsDashboard";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -180,6 +181,7 @@ export default function Page() {
           Enviar
         </button>
       </form>
+      <MetricsDashboard />
     </main>
   );
 }
