@@ -106,6 +106,6 @@ Os indicadores de status no cabeçalho refletem as execuções dos workflows do 
 * Medium: [medium.com/@ornelas.tozato](https://medium.com/@ornelas.tozato)
 * Comunidade DEV: [dev.to/rafaeltozato](https://dev.to/rafaeltozato)
 
-💼 **REDE E CONTATO**
+💼 **CONTATO**
 * LinkedIn: [linkedin.com/in/rafaeltozato81](https://www.linkedin.com/in/rafaeltozato81)
 * E-mail: ornelas.tozato@gmail.com
