@@ -21,23 +21,17 @@ Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governanç
   <a href="https://github.com/Rafael-TOZATO"><img src="https://img.shields.io/badge/QA_%26_Automation-Quality_Gate-2E8B57?style=for-the-badge&logo=githubactions&logoColor=white" alt="QA Automation"></a>
 </p>
 
----
-
 ## 📌 Visão Geral & Arquitetura
 
 O **Tozato Dev Hub** é uma plataforma distribuída que integra portfólio executivo, central de validações técnicas, métricas de qualidade e um assistente conversacional otimizado para engenharia de software e análise de dados.
 
 Projetado sob os pilares *Privacy-First* e *Offline-First*, o ecossistema permite alternar entre uma interface web de alta disponibilidade (Edge Deployment via Vercel) e um pipeline de inferência 100% local executado via **Ollama API (v1)** com a família de modelos **Qwen3.5 9B**. Essa abordagem híbrida garante processamento autônomo, elimina custos por consumo de API comercial e assegura total conformidade e soberania sobre os dados.
 
----
-
 ## 📑 Dossiê Técnico & Documentação de Arquitetura
 
 A documentação executiva completa do projeto — incluindo topologia de rede, testes de latência, consumo de VRAM e diretrizes de implantação em ambiente corporativo — está anexada diretamente ao repositório:
 
 📄 **[Acessar Dossiê Técnico em PDF — Agente de Código Offline](./Dossie%20Tecnico%20-%20Agente%20de%20Codigo%20Offline%20%281%29.pdf)**
-
----
 
 ## 🚀 Guia de Implantação e Execução Offline
 
@@ -53,7 +47,6 @@ Em um terminal dedicado, inicialize o modelo com parâmetros de contexto estendi
 ollama pull qwen3.5:9b
 OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NO_CLOUD=1 OLLAMA_CONTEXT_LENGTH=65536 ollama serve
 ```
----
 
 ## 🤝 Contribuição e Governança
 
@@ -63,10 +56,7 @@ Contribuições e relatos de bugs são bem-vindos para o aprimoramento contínuo
 * **Sugestões de Features:** Abra uma [Issue de Melhoria](https://github.com/Rafael-TOZATO/tozato-ai-core/issues/new?template=feature_request.md).
 * **Pull Requests:** Antes de enviar um PR, certifique-se de vincular a uma issue existente para validação do Quality Gate.
 
-Para mais detalhes sobre os padrões de commits e arquitetura, consulte o nosso [Guia de Contribuição](./CONTRIBUTING.md).
-
----
-
+Para mais detalhes sobre os padrões de commits e arquitetura, consulte o nosso [Guia de Contribuição](./CONTRIBUTING.md)]
 
 ## 🔐 Segurança e Governança
 
@@ -90,8 +80,6 @@ O projeto aplica controles preventivos e verificações automatizadas ao código
 - [Dependabot](https://github.com/Rafael-TOZATO/tozato-ai-core/network/updates)
 
 Os indicadores de status no cabeçalho refletem as execuções dos workflows do GitHub Actions. A aprovação final depende da conclusão dos pipelines após cada atualização.
-
----
 
 ## 📬 CONTATOS E PERFIS
 
