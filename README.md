@@ -11,6 +11,7 @@ Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governanç
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/commits/main"><img src="https://img.shields.io/github/last-commit/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=git&color=brightgreen" alt="Last Commit"></a>
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/stargazers"><img src="https://img.shields.io/github/stars/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=gold" alt="GitHub Stars"></a>
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/network/members"><img src="https://img.shields.io/github/forks/Rafael-TOZATO/tozato-ai-core?style=for-the-badge&logo=github&color=blue" alt="GitHub Forks"></a>
+  <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/security"><img src="https://img.shields.io/badge/Secret_Protection-Enabled-2E8B57?style=for-the-badge&logo=github&logoColor=white" alt="Secret Protection Enabled"></a>
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/nextjs-ci.yml"><img src="https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/nextjs-ci.yml/badge.svg" alt="Quality Gate"></a>
   <a href="https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/codeql.yml"><img src="https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/codeql.yml/badge.svg" alt="CodeQL"></a>
   <br>
@@ -62,19 +63,21 @@ Para mais detalhes sobre os padrões de commits e arquitetura, consulte o nosso 
 
 O projeto aplica controles preventivos e verificações automatizadas ao código-fonte, às dependências e ao processo de integração contínua, sem interferir na interface visual ou nos componentes de interação.
 
-### Controles implementados
+## Controles implementados
 
-* **API e proteção de dados:** chave Gemini mantida exclusivamente no ambiente do servidor e transmitida pelo cabeçalho `x-goog-api-key`; origem do navegador validada para o domínio de produção e previews da Vercel; mensagens limitadas a 8.000 caracteres; até 5 anexos e 4 MB no total; corpo HTTP limitado a 4,4 MB; histórico limitado; timeout de 30 segundos para o serviço externo.
-* **Tratamento de erros:** respostas externas não são repassadas ao cliente nem registradas integralmente nos logs; respostas inválidas, limites excedidos e timeout recebem tratamento específico.
-* **Cabeçalhos HTTP:** proteção contra MIME sniffing, clickjacking e exposição excessiva de referenciador; política de permissões para recursos do navegador; respostas da API sem cache.
-* **Dependências:** Next.js 16.4.5 e React/React DOM 19.2.9, com atualização direcionada para versões corrigidas dos avisos de segurança publicados em novembro de 2026.
-* **Quality Gate:** instalação controlada pelo pnpm, auditoria de vulnerabilidades com bloqueio a partir de severidade moderada, validação TypeScript e build de produção.
-* **SAST:** análise estática CodeQL com consultas `security-extended` e `security-and-quality`, executada em push, pull request e agenda semanal.
-* **Governança de dependências:** Dependabot configurado para monitoramento e atualização semanal das dependências de produção e desenvolvimento.
-* **Limitação operacional identificada:** não há rate limiting distribuído por IP configurado no repositório. Esse controle requer uma política WAF ou um serviço de limitação compartilhado na camada de hospedagem.
+- **API e proteção de dados:** chave Gemini mantida exclusivamente no ambiente do servidor e transmitida pelo cabeçalho `x-goog-api-key`; origem do navegador validada para o domínio de produção e previews da Vercel; mensagens limitadas a 8.000 caracteres; até 5 anexos e 4 MB no total; corpo HTTP limitado a 4,4 MB; histórico limitado; timeout de 30 segundos para o serviço externo.
+- **Secret Protection (GitHub Advanced Security):** monitoramento contínuo e bloqueio preventivo contra exposição acidental de chaves de API, tokens de acesso, credenciais de banco de dados e segredos criptográficos no código-fonte.
+- **Tratamento de erros:** respostas externas não são repassadas ao cliente nem registradas integralmente nos logs; respostas inválidas, limites excedidos e timeout recebem tratamento específico.
+- **Cabeçalhos HTTP:** proteção contra MIME sniffing, clickjacking e exposição excessiva de referenciador; política de permissões para recursos do navegador; respostas da API sem cache.
+- **Dependências:** Next.js 16.4.5 e React/React DOM 19.2.9, com atualização direcionada para versões corrigidas dos avisos de segurança publicados em novembro de 2026.
+- **Quality Gate:** instalação controlada pelo pnpm, auditoria de vulnerabilidades com bloqueio a partir de severidade moderada, validação TypeScript e build de produção.
+- **SAST:** análise estática CodeQL com consultas `security-extended` e `security-and-quality`, executada em push, pull request e agenda semanal.
+- **Governança de dependências:** Dependabot configurado para monitoramento e atualização semanal das dependências de produção e desenvolvimento.
+- **Limitação operacional identificada:** não há rate limiting distribuído por IP configurado no repositório. Esse controle requer uma política WAF ou um serviço de limitação compartilhado na camada de hospedagem.
 
-### Verificações automatizadas
+## Verificações automatizadas
 
+- [Secret Protection & Security Overview](https://github.com/Rafael-TOZATO/tozato-ai-core/security)
 - [Quality Gate](https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/nextjs-ci.yml)
 - [CodeQL Security Analysis](https://github.com/Rafael-TOZATO/tozato-ai-core/actions/workflows/codeql.yml)
 - [Dependabot](https://github.com/Rafael-TOZATO/tozato-ai-core/network/updates)
