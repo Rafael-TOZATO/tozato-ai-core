@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Tozato - Core AI: transforme ideias em impacto',
+        alt: 'Tozato AI Core: Engenharia 4.0 e Inteligência Artificial',
       },
     ],
     locale: 'pt_BR',
