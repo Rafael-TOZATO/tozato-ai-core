@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
+import DeveloperAnalytics from "@/components/developer-analytics";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -121,6 +122,7 @@ export default function Page() {
   return (
     <main style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto", fontFamily: "sans-serif" }}>
       <h1>Tozato AI Core - Assistente IA</h1>
+      <DeveloperAnalytics />
       <div
         style={{ border: "1px solid #ccc", padding: "1rem", minHeight: "300px", maxHeight: "400px", overflowY: "scroll", marginBottom: "1rem", borderRadius: "8px" }}
         onDragOver={(event) => event.preventDefault()}
