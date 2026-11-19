@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
+  title: 'Tozato AI Core',
   description: 'Assistente de inteligência artificial multimodal Tozato AI Core.',
   metadataBase: new URL('https://tozato-ai-core.vercel.app'),
   openGraph: {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
     url: 'https://tozato-ai-core.vercel.app',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/tozato-ai-core-banner.gif',
         width: 1200,
         height: 630,
         alt: 'Tozato AI Core: Engenharia 4.0 e Inteligência Artificial',
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Tozato AI Core',
     description: 'Assistente de inteligência artificial multimodal Tozato AI Core.',
-    images: ['/og-image.jpg'],
+    images: ['/tozato-ai-core-banner.gif'],
   },
 }
 
