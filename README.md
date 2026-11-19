@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="assets/banner.jpg" alt="Tozato - Core AI: transforme ideias em impacto" width="100%">
+  <img src="assets/banner.jpg" alt="Tozato AI Core: ENGENHARIA 4.0 E INTELIGÊNCIA ARTIFICIAL" width="100%">
 </p>
-
-# Tozato Core AI
 
 Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governança de Dados e Inteligência Artificial Local.
 
