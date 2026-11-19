@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/tozato-ai-core-banner.gif" alt="Tozato AI Core: ENGENHARIA 4.0 E INTELIGÊNCIA ARTIFICIAL" width="100%">
+  <img src="tozato-ai-core-banner.gif" alt="Tozato AI Core: ENGENHARIA 4.0 E INTELIGÊNCIA ARTIFICIAL" width="100%">
 </p>
 
 Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governança de Dados e Inteligência Artificial Local.
