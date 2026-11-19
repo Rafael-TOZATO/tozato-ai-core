@@ -121,6 +121,11 @@ export default function Page() {
 
   return (
     <main style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto", fontFamily: "sans-serif" }}>
+      <img
+        src="/tozato-ai-core-banner.gif"
+        alt="Tozato AI Core: Engenharia 4.0 e Inteligência Artificial"
+        style={{ width: "100%", height: "auto", borderRadius: "8px", marginBottom: "1rem", display: "block" }}
+      />
       <h1>Tozato AI Core - Assistente IA</h1>
       <DeveloperAnalytics />
       <div
