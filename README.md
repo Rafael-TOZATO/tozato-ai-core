@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.jpg" alt="Tozato AI Core: ENGENHARIA 4.0 E INTELIGÊNCIA ARTIFICIAL" width="100%">
+  <img src="assets/tozato-ai-core-banner.gif" alt="Tozato AI Core: ENGENHARIA 4.0 E INTELIGÊNCIA ARTIFICIAL" width="100%">
 </p>
 
 Hub Profissional de Engenharia de Software, QA Automotivo/Industrial, Governança de Dados e Inteligência Artificial Local.
@@ -55,7 +55,7 @@ Contribuições e relatos de bugs são bem-vindos para o aprimoramento contínuo
 * **Sugestões de Features:** Abra uma [Issue de Melhoria](https://github.com/Rafael-TOZATO/tozato-ai-core/issues/new?template=feature_request.md).
 * **Pull Requests:** Antes de enviar um PR, certifique-se de vincular a uma issue existente para validação do Quality Gate.
 
-Para mais detalhes sobre os padrões de commits e arquitetura, consulte o nosso [Guia de Contribuição](./CONTRIBUTING.md)]
+Para mais detalhes sobre os padrões de commits e arquitetura, consulte o nosso [Guia de Contribuição](./CONTRIBUTING.md).
 
 ## 🔐 Segurança e Governança
 
