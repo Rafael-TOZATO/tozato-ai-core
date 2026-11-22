@@ -2,9 +2,9 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Tozato - AI - Core',
-    short_name: 'Tozato - AI - Core',
-    description: 'Assistente de inteligência artificial multimodal Tozato - AI - Core.',
+    name: 'Tozato AI Core',
+    short_name: 'Tozato AI Core',
+    description: 'Assistente de inteligência artificial multimodal Tozato AI Core.',
     start_url: '/',
     display: 'standalone',
     background_color: '#0a0a0a',
