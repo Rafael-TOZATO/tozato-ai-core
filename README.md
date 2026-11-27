@@ -85,7 +85,7 @@ Os indicadores de status no cabeçalho refletem as execuções dos workflows do 
 ## 📬 CONTATOS E PERFIS
 
 💻 **PROJECTS & PORTFOLIOS**
-* App Ecosystem: https://tozato-ai-core.vercel.app
+* App Ecosystem / Dev Hub: https://tozato-ai-core.vercel.app
 * H-Folio Professional: https://h-folio-I0.vercel.app
 
 🧩 **AGENSI**
@@ -101,9 +101,11 @@ Os indicadores de status no cabeçalho refletem as execuções dos workflows do 
 🪟 **MICROSOFT LEARN**
 * Perfil: https://learn.microsoft.com/pt-br/users/rafaelornelastozato-2209
 
+💼 **LINKEDIN**
+* Perfil Profissional: https://www.linkedin.com/in/rafaeltozato81
+
 📬 **CONTACT**
 * 📌 E-mail: ornelas.tozato@gmail.com
-* 🌐 Dev Hub (Ao vivo): https://tozato-ai-core.vercel.app
 💼 **CONTATO**
 * LinkedIn: [linkedin.com/in/rafaeltozato81](https://www.linkedin.com/in/rafaeltozato81)
   
