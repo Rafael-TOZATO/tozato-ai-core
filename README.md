@@ -84,17 +84,26 @@ Os indicadores de status no cabeçalho refletem as execuções dos workflows do 
 
 ## 📬 CONTATOS E PERFIS
 
-💻 **PROJETOS E PORTFÓLIOS**
-* Ecossistema de Aplicativo: [tozato-ai-core.vercel.app](https://tozato-ai-core.vercel.app)
-* H-Folio Professional: [h-folio-I0.vercel.app](https://h-folio-I0.vercel.app)
+💻 **PROJECTS & PORTFOLIOS**
+* App Ecosystem: https://tozato-ai-core.vercel.app
+* H-Folio Professional: https://h-folio-I0.vercel.app
 
-🐙 **CÓDIGOS E REPOSITÓRIOS**
-* GitHub: [github.com/Rafael-TOZATO](https://github.com/Rafael-TOZATO)
+🧩 **AGENSI**
+* Creator: https://www.agensi.io/creators/rafael-ornelas-tozato
 
-✍️ **ARTIGOS E PUBLICAÇÕES**
-* Medium: [medium.com/@ornelas.tozato](https://medium.com/@ornelas.tozato)
-* Comunidade DEV: [dev.to/rafaeltozato](https://dev.to/rafaeltozato)
+🐙 **CODES & REPOSITORIES**
+* GitHub: https://github.com/Rafael-TOZATO
 
+✍️ **ARTICLES & PUBLICATIONS**
+* Medium: https://medium.com/@ornelas.tozato
+* DEV Community: https://dev.to/rafaeltozato
+
+🪟 **MICROSOFT LEARN**
+* Perfil: https://learn.microsoft.com/pt-br/users/rafaelornelastozato-2209
+
+📬 **CONTACT**
+* 📌 E-mail: ornelas.tozato@gmail.com
+* 🌐 Dev Hub (Ao vivo): https://tozato-ai-core.vercel.app
 💼 **CONTATO**
 * LinkedIn: [linkedin.com/in/rafaeltozato81](https://www.linkedin.com/in/rafaeltozato81)
-* E-mail: ornelas.tozato@gmail.com
+  
