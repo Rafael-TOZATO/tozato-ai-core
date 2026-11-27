@@ -105,7 +105,6 @@ Os indicadores de status no cabeçalho refletem as execuções dos workflows do 
 * Perfil Profissional: https://www.linkedin.com/in/rafaeltozato81
 
 📬 **CONTACT**
-* 📌 E-mail: ornelas.tozato@gmail.com
-💼 **CONTATO**
-* LinkedIn: [linkedin.com/in/rafaeltozato81](https://www.linkedin.com/in/rafaeltozato81)
+* E-mail: ornelas.tozato@gmail.com
+
   
